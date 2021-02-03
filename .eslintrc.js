@@ -1,0 +1,63 @@
+module.exports = {
+    env: {
+        browser: true,
+    },
+    extends: [
+        "airbnb-base",
+    ],
+    globals: {
+        gl: true,
+        GL: true,
+        LS: true,
+        Uint8Array: true,
+        Uint32Array: true,
+        Float32Array: true,
+        LGraphCanvas: true,
+        LGraph: true,
+        LGraphNode: true,
+        LiteGraph: true,
+        LGraphTexture: true,
+        Mesh: true,
+        Shader: true,
+        enableWebGLCanvas: true,
+        vec2: true,
+        vec3: true,
+        vec4: true,
+        DEG2RAD: true,
+        isPowerOfTwo: true,
+        cloneCanvas: true,
+        createCanvas: true,
+        hex2num: true,
+        colorToString: true,
+        showElement: true,
+        quat: true,
+        AudioSynth: true,
+        SillyClient: true,
+    },
+    parserOptions: {
+        ecmaVersion: 2020,
+    },
+    rules: {
+        indent: ["error", 4, { SwitchCase: 1 }],
+        quotes: ["error", "double"],
+        "no-underscore-dangle": 0,
+        "no-param-reassign": 0,
+        "no-console": 0,
+        "no-plusplus": 0,
+        "no-restricted-syntax": [
+            "error",
+            {
+                selector: "ForInStatement",
+                message: "for..in loops iterate over the entire prototype chain, which is virtually never what you want. Use Object.{keys,values,entries}, and iterate over the resulting array.",
+            },
+            {
+                selector: "LabeledStatement",
+                message: "Labels are a form of GOTO; using them makes code confusing and hard to maintain and understand.",
+            },
+            {
+                selector: "WithStatement",
+                message: "`with` is disallowed in strict mode because it makes code impossible to predict and optimize.",
+            },
+        ],
+    },
+};

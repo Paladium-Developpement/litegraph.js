@@ -1,19 +1,15 @@
-//basic nodes
-(function(global) {
-    var LiteGraph = global.LiteGraph;
+// basic nodes
+(function (global) {
+    const { LiteGraph } = global;
 
     function toString(a) {
-		if(a && a.constructor === Object)
-		{
-			try
-			{
-				return JSON.stringify(a);
-			}
-			catch (err)
-			{
-				return String(a);
-			}
-		}
+        if (a && a.constructor === Object) {
+            try {
+                return JSON.stringify(a);
+            } catch (err) {
+                return String(a);
+            }
+        }
         return String(a);
     }
 
@@ -27,7 +23,7 @@
         "string/compare",
         compare,
         ["string", "string"],
-        "boolean"
+        "boolean",
     );
 
     function concatenate(a, b) {
@@ -44,7 +40,7 @@
         "string/concatenate",
         concatenate,
         ["string", "string"],
-        "string"
+        "string",
     );
 
     function contains(a, b) {
@@ -58,7 +54,7 @@
         "string/contains",
         contains,
         ["string", "string"],
-        "boolean"
+        "boolean",
     );
 
     function toUpperCase(a) {
@@ -72,23 +68,18 @@
         "string/toUpperCase",
         toUpperCase,
         ["string"],
-        "string"
+        "string",
     );
 
     function split(str, separator) {
-		if(separator == null)
-			separator = this.properties.separator;
-        if (str == null )
-	        return [];
-		if( str.constructor === String )
-			return str.split(separator || " ");
-		else if( str.constructor === Array )
-		{
-			var r = [];
-			for(var i = 0; i < str.length; ++i)
-				r[i] = str[i].split(separator || " ");
-			return r;
-		}
+        if (separator == null) { separator = this.properties.separator; }
+        if (str == null) { return []; }
+        if (str.constructor === String) { return str.split(separator || " "); }
+        if (str.constructor === Array) {
+            const r = [];
+            for (let i = 0; i < str.length; ++i) { r[i] = str[i].split(separator || " "); }
+            return r;
+        }
         return null;
     }
 
@@ -97,7 +88,7 @@
         split,
         ["string,array", "string"],
         "array",
-		{ separator: "," }
+        { separator: "," },
     );
 
     function toFixed(a) {
@@ -112,9 +103,8 @@
         toFixed,
         ["number"],
         "string",
-        { precision: 0 }
+        { precision: 0 },
     );
-
 
     function StringToTable() {
         this.addInput("", "string");
@@ -122,27 +112,24 @@
         this.addOutput("rows", "number");
         this.addProperty("value", "");
         this.addProperty("separator", ",");
-		this._table = null;
+        this._table = null;
     }
 
     StringToTable.title = "toTable";
     StringToTable.desc = "Splits a string to table";
 
-    StringToTable.prototype.onExecute = function() {
-        var input = this.getInputData(0);
-		if(!input)
-			return;
-		var separator = this.properties.separator || ",";
-		if(input != this._str || separator != this._last_separator )
-		{
-			this._last_separator = separator;
-			this._str = input;
-			this._table = input.split("\n").map(function(a){ return a.trim().split(separator)});
-		}
-        this.setOutputData(0, this._table );
-        this.setOutputData(1, this._table ? this._table.length : 0 );
+    StringToTable.prototype.onExecute = function () {
+        const input = this.getInputData(0);
+        if (!input) { return; }
+        const separator = this.properties.separator || ",";
+        if (input != this._str || separator != this._last_separator) {
+            this._last_separator = separator;
+            this._str = input;
+            this._table = input.split("\n").map((a) => a.trim().split(separator));
+        }
+        this.setOutputData(0, this._table);
+        this.setOutputData(1, this._table ? this._table.length : 0);
     };
 
     LiteGraph.registerNodeType("string/toTable", StringToTable);
-
-})(this);
+}(this));

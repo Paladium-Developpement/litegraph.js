@@ -10,16 +10,14 @@
     "private": false,
     "scripts": {
         "prebuild": "rimraf build",
-        "build": "grunt build",
         "start": "nodemon utils/server.js",
         "test": "echo \"Error: no test specified\" && exit 1",
-        "prettier": "npx prettier --write src/**/*.* css/**/*.*",
-        "lint": "npx eslint src",
-        "lint:fix": "npx eslint --fix src"
+        "lint": "eslint src",
+        "lint:fix": "eslint --fix src"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/jagenjo/litegraph.js.git"
+        "url": "git+https://github.com/Paladium-Developpement/litegraph.js"
     },
     "author": "jagenjo",
     "license": "MIT",
@@ -33,13 +31,10 @@
     },
     "homepage": "https://github.com/jagenjo/litegraph.js#readme",
     "devDependencies": {
+        "eslint": "^7.2.0",
+        "eslint-config-airbnb-base": "^14.2.1",
+        "eslint-plugin-import": "^2.22.1",
         "express": "^4.17.1",
-        "google-closure-compiler": "^20171112.0.0",
-        "grunt": "^1.1.0",
-        "grunt-cli": "^1.2.0",
-        "grunt-closure-tools": "^1.0.0",
-        "grunt-contrib-concat": "^1.0.1",
-        "nodemon": "^1.19.4",
-        "rimraf": "^2.7.1"
+        "nodemon": "^1.19.4"
     }
 }
