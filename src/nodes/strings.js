@@ -13,13 +13,13 @@
         return String(a);
     }
 
-    LiteGraph.wrapFunctionAsNode("string/toString", toString, [""], "String");
+    LiteGraph.LiteGraph.wrapFunctionAsNode("string/toString", toString, [""], "String");
 
     function compare(a, b) {
         return a == b;
     }
 
-    LiteGraph.wrapFunctionAsNode(
+    LiteGraph.LiteGraph.wrapFunctionAsNode(
         "string/compare",
         compare,
         ["string", "string"],
@@ -36,7 +36,7 @@
         return a + b;
     }
 
-    LiteGraph.wrapFunctionAsNode(
+    LiteGraph.LiteGraph.wrapFunctionAsNode(
         "string/concatenate",
         concatenate,
         ["string", "string"],
@@ -50,7 +50,7 @@
         return a.indexOf(b) != -1;
     }
 
-    LiteGraph.wrapFunctionAsNode(
+    LiteGraph.LiteGraph.wrapFunctionAsNode(
         "string/contains",
         contains,
         ["string", "string"],
@@ -64,7 +64,7 @@
         return a;
     }
 
-    LiteGraph.wrapFunctionAsNode(
+    LiteGraph.LiteGraph.wrapFunctionAsNode(
         "string/toUpperCase",
         toUpperCase,
         ["string"],
@@ -83,7 +83,7 @@
         return null;
     }
 
-    LiteGraph.wrapFunctionAsNode(
+    LiteGraph.LiteGraph.wrapFunctionAsNode(
         "string/split",
         split,
         ["string,array", "string"],
@@ -98,7 +98,7 @@
         return a;
     }
 
-    LiteGraph.wrapFunctionAsNode(
+    LiteGraph.LiteGraph.wrapFunctionAsNode(
         "string/toFixed",
         toFixed,
         ["number"],
@@ -131,5 +131,5 @@
         this.setOutputData(1, this._table ? this._table.length : 0);
     };
 
-    LiteGraph.registerNodeType("string/toTable", StringToTable);
+    LiteGraph.LiteGraph.registerNodeType("string/toTable", StringToTable);
 }(this));

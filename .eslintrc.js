@@ -5,6 +5,7 @@ module.exports = {
     extends: [
         "airbnb-base",
     ],
+    parser: "@babel/eslint-parser",
     globals: {
         gl: true,
         GL: true,
@@ -41,8 +42,11 @@ module.exports = {
         indent: ["error", 4, { SwitchCase: 1 }],
         quotes: ["error", "double"],
         "no-underscore-dangle": 0,
+        "no-continue": 0,
+        "no-break": 0,
         "no-param-reassign": 0,
         "no-console": 0,
+        "consistent-return": 0,
         "no-plusplus": 0,
         "no-restricted-syntax": [
             "error",

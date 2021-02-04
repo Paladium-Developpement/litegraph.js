@@ -341,7 +341,7 @@ export type serializedLGraph<
 };
 
 export declare class LGraph {
-    static supported_types: string[];
+    static supportedTypes: string[];
     static STATUS_STOPPED: 1;
     static STATUS_RUNNING: 2;
 
@@ -996,7 +996,7 @@ export declare class LGraphNode {
     onBeforeConnectInput?(
         inputIndex: number
     ): number;
-    
+
     /** a connection changed (new one or removed) (LiteGraph.INPUT or LiteGraph.OUTPUT, slot, true if connected, link_info, input_info or output_info ) */
     onConnectionsChange(
         type: number,
@@ -1004,7 +1004,7 @@ export declare class LGraphNode {
         isConnected: boolean,
         link: LLink,
         ioSlot: (INodeOutputSlot | INodeInputSlot)
-    ): void;                           
+    ): void;
 
     /**
      * if returns false, will abort the `LGraphNode.setProperty`

@@ -1,6 +1,8 @@
 // Creates an interface to access extra features from a graph (like play, stop, live, etc)
-class Editor {
-    constructor(container_id, options) {
+import LGraph from "./LGraph";
+
+export default class Editor {
+    constructor(containerId, options) {
         options = options || {};
 
         // fill container
@@ -31,7 +33,7 @@ class Editor {
         }
 
         // append to DOM
-        const parent = document.getElementById(container_id);
+        const parent = document.getElementById(containerId);
         if (parent) {
             parent.appendChild(root);
         }
@@ -112,5 +114,3 @@ class Editor {
         this.root.querySelector(".content").appendChild(miniwindow);
     }
 }
-
-LiteGraph.Editor = Editor;
