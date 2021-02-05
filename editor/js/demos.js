@@ -73,7 +73,6 @@ function benchmark() {
 function TestWidgetsNode() {
     this.addOutput("", "number");
     this.properties = {};
-    const that = this;
     this.slider = this.addWidget("slider", "Slider", 0.5, (v) => {}, { min: 0, max: 1 });
     this.number = this.addWidget("number", "Number", 0.5, (v) => {}, { min: 0, max: 100 });
     this.combo = this.addWidget("combo", "Combo", "red", (v) => {}, { values: ["red", "green", "blue"] });

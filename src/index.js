@@ -5,5 +5,6 @@ export { default as LGraphGroup } from "./LGraphGroup";
 export { default as DragAndScale } from "./DragAndScale";
 export { default as CurveEditor } from "./CurveEditor";
 export { default as LGraphCanvas } from "./LGraphCanvas";
+export { default as ContextMenu } from "./ContextMenu";
 export { default as Editor } from "./litegraph-editor";
 export { default as LiteGraph } from "./litegraph";
