@@ -12,10 +12,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Build
-        uses: andstor/jsdoc-action@v1
-        with:
-          config_file: .jsdoc.json
+      - name: Setup NodeJS
+      - uses: actions/setup-node@v2
+
+      - name: Get Dependency
+      - run: npm i
+
+      - name: Generate doc
+      - run: npm run doc
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
