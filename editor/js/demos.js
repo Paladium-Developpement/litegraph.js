@@ -3,7 +3,6 @@ function demo() {
 }
 
 function multiConnection() {
-    const { LiteGraph } = LiteGraph;
     const node_button = LiteGraph.createNode("widget/button");
     node_button.pos = [100, 400];
     graph.add(node_button);
@@ -88,7 +87,8 @@ function TestWidgetsNode() {
 
 TestWidgetsNode.title = "Widgets";
 
-LiteGraph.LiteGraph.registerNodeType("features/widgets", TestWidgetsNode);
+LiteGraph.LGraphNode.extendNode(TestWidgetsNode)
+LiteGraph.registerNodeType("features/widgets", TestWidgetsNode);
 
 // Show value inside the debug console
 function TestSpecialNode() {
@@ -102,7 +102,7 @@ function TestSpecialNode() {
 }
 
 TestSpecialNode.title = "Custom Shapes";
-TestSpecialNode.title_mode = LiteGraph.LiteGraph.TRANSPARENT_TITLE;
+TestSpecialNode.title_mode = LiteGraph.TRANSPARENT_TITLE;
 TestSpecialNode.slot_start_y = 20;
 
 TestSpecialNode.prototype.onDrawBackground = function (ctx) {
@@ -158,7 +158,8 @@ TestSpecialNode.prototype.onBounding = function (rect) {
     if (!this.flags.collapsed && this.mouseOver) rect[3] = this.size[1] + 20;
 };
 
-LiteGraph.LiteGraph.registerNodeType("features/shape", TestSpecialNode);
+LiteGraph.LGraphNode.extendNode(TestSpecialNode)
+LiteGraph.registerNodeType("features/shape", TestSpecialNode);
 
 // Show value inside the debug console
 function TestSlotsNode() {
@@ -171,7 +172,8 @@ function TestSlotsNode() {
 
 TestSlotsNode.title = "Flat Slots";
 
-LiteGraph.LiteGraph.registerNodeType("features/slots", TestSlotsNode);
+LiteGraph.LGraphNode.extendNode(TestSlotsNode)
+LiteGraph.registerNodeType("features/slots", TestSlotsNode);
 
 // Show value inside the debug console
 function TestPropertyEditorsNode() {
@@ -194,4 +196,5 @@ function TestPropertyEditorsNode() {
 
 TestPropertyEditorsNode.title = "Properties";
 
-LiteGraph.LiteGraph.registerNodeType("features/properties_editor", TestPropertyEditorsNode);
+LiteGraph.LGraphNode.extendNode(TestPropertyEditorsNode)
+LiteGraph.registerNodeType("features/properties_editor", TestPropertyEditorsNode);

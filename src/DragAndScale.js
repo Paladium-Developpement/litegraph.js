@@ -116,12 +116,12 @@ export default class DragAndScale {
             }
 
             // from stack overflow
-            if (e.wheelDelta){
-                e.delta = e.wheelDelta / 40
+            if (e.wheelDelta) {
+                e.delta = e.wheelDelta / 40;
             } else if (e.deltaY) {
-                e.delta = -e.deltaY / 3
+                e.delta = -e.deltaY / 3;
             } else {
-                e.delta = 0
+                e.delta = 0;
             }
             this.changeDeltaScale(1.0 + e.delta * 0.05);
         }

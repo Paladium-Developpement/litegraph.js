@@ -1,5 +1,6 @@
 // Creates an interface to access extra features from a graph (like play, stop, live, etc)
 import LGraph from "./LGraph";
+import LGraphCanvas from "./LGraphCanvas";
 
 export default class Editor {
     constructor(containerId, options) {
@@ -107,7 +108,7 @@ export default class Editor {
         close_button.innerHTML = "&#10060;";
         close_button.addEventListener("click", (e) => {
             graphcanvas.setGraph(null);
-            miniwindow.parentNode.removeChild(miniwindow);
+            miniwindow.remove();
         });
         miniwindow.appendChild(close_button);
 

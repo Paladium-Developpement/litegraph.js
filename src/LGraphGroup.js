@@ -1,4 +1,5 @@
 import LGraphNode from "./LGraphNode";
+import defaultConfig from "./utils/defaultConfig";
 
 export default class LGraphGroup {
     constructor(title) {
@@ -8,9 +9,7 @@ export default class LGraphGroup {
     _ctor(title) {
         this.title = title || "Group";
         this.font_size = 24;
-        this.color = LGraphCanvas.node_colors.pale_blue
-            ? LGraphCanvas.node_colors.pale_blue.groupcolor
-            : "#AAA";
+        this.color = "#AAA";
         this._bounding = new Float32Array([10, 10, 140, 80]);
         this._pos = this._bounding.subarray(0, 2);
         this._size = this._bounding.subarray(2, 4);

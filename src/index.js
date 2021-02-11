@@ -7,4 +7,35 @@ export { default as CurveEditor } from "./CurveEditor";
 export { default as LGraphCanvas } from "./LGraphCanvas";
 export { default as ContextMenu } from "./ContextMenu";
 export { default as Editor } from "./litegraph-editor";
-export { default as LiteGraph } from "./litegraph";
+
+export { default as defaultConfig } from "./utils/defaultConfig";
+export * from "./utils/registry";
+export * from "./utils/math";
+export * from "./utils/function";
+
+if (window && window.CanvasRenderingContext2D) {
+    window.CanvasRenderingContext2D.prototype.roundRect = function roundRect(
+        x,
+        y,
+        width,
+        height,
+        radius = 5,
+        radiusLow = radius,
+    ) {
+        this.moveTo(x + radius, y);
+        this.lineTo(x + width - radius, y);
+        this.quadraticCurveTo(x + width, y, x + width, y + radius);
+
+        this.lineTo(x + width, y + height - radiusLow);
+        this.quadraticCurveTo(
+            x + width,
+            y + height,
+            x + width - radiusLow,
+            y + height,
+        );
+        this.lineTo(x + radiusLow, y + height);
+        this.quadraticCurveTo(x, y + height, x, y + height - radiusLow);
+        this.lineTo(x, y + radius);
+        this.quadraticCurveTo(x, y, x + radius, y);
+    };
+}

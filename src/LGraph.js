@@ -1,4 +1,8 @@
-import LiteGraph from "./litegraph";
+import defaultConfig from "./utils/defaultConfig";
+import getTime from "./utils/time";
+import LGraphNode from "./LGraphNode";
+import LGraphGroup from "./LGraphGroup";
+import LGraphCanvas from "./LGraphCanvas";
 
 /**
  * LGraph is the class that contain a full graph.
@@ -14,7 +18,7 @@ import LiteGraph from "./litegraph";
  */
 export default class LGraph {
     constructor(o) {
-        if (LiteGraph.debug) {
+        if (defaultConfig.debug) {
             console.log("Graph created");
         }
         this.list_of_graphcanvas = null;
@@ -156,7 +160,7 @@ export default class LGraph {
         this.sendEventToAllNodes("onStart");
 
         // launch
-        this.starttime = LiteGraph.getTime();
+        this.starttime = getTime();
         this.last_update_time = this.starttime;
         interval = interval || 0;
         const that = this;
@@ -201,7 +205,7 @@ export default class LGraph {
             this.onStopEvent();
         }
 
-        if (this.execution_timer_id !== null) {
+        if (this.execution_timer_id) {
             if (this.execution_timer_id !== -1) {
                 clearInterval(this.execution_timer_id);
             }
@@ -221,7 +225,7 @@ export default class LGraph {
     runStep(num, doNotCatchError, limit) {
         num = num || 1;
 
-        const start = LiteGraph.getTime();
+        const start = getTime();
         this.globaltime = 0.001 * (start - this.starttime);
 
         const nodes = this._nodes_executable
@@ -238,7 +242,7 @@ export default class LGraph {
             for (let i = 0; i < num; i++) {
                 for (let j = 0; j < limit; j++) {
                     const node = nodes[j];
-                    if (node.mode === LiteGraph.ALWAYS && node.onExecute) {
+                    if (node.mode === defaultConfig.ALWAYS && node.onExecute) {
                         node.onExecute(); // hard to send elapsed time
                     }
                 }
@@ -258,7 +262,7 @@ export default class LGraph {
                 for (let i = 0; i < num; i++) {
                     for (let j = 0; j < limit; ++j) {
                         const node = nodes[j];
-                        if (node.mode === LiteGraph.ALWAYS && node.onExecute) {
+                        if (node.mode === defaultConfig.ALWAYS && node.onExecute) {
                             node.onExecute();
                         }
                     }
@@ -275,17 +279,17 @@ export default class LGraph {
                 this.errors_in_execution = false;
             } catch (err) {
                 this.errors_in_execution = true;
-                if (LiteGraph.throw_errors) {
+                if (defaultConfig.throw_errors) {
                     throw err;
                 }
-                if (LiteGraph.debug) {
+                if (defaultConfig.debug) {
                     console.log(`Error during execution: ${err}`);
                 }
                 this.stop();
             }
         }
 
-        const now = LiteGraph.getTime();
+        const now = getTime();
         let elapsed = now - start;
         if (elapsed === 0) {
             elapsed = 1;
@@ -420,7 +424,7 @@ export default class LGraph {
         // eslint-disable-next-line guard-for-in,no-restricted-syntax
         for (const i in M) L.push(M[i]);
 
-        if (L.length !== this._nodes.length && LiteGraph.debug) {
+        if (L.length !== this._nodes.length && defaultConfig.debug) {
             console.warn("something went wrong, nodes missing");
         }
 
@@ -505,12 +509,12 @@ export default class LGraph {
                 continue;
             }
             let maxSize = 100;
-            let y = margin + LiteGraph.NODE_TITLE_HEIGHT;
+            let y = margin + defaultConfig.NODE_TITLE_HEIGHT;
             for (const node of column) {
                 node.pos[0] = x;
                 node.pos[1] = y;
                 if (node.size[0] > maxSize) maxSize = node.size[0];
-                y += node.size[1] + margin + LiteGraph.NODE_TITLE_HEIGHT;
+                y += node.size[1] + margin + defaultConfig.NODE_TITLE_HEIGHT;
             }
             x += maxSize + margin;
         }
@@ -556,7 +560,7 @@ export default class LGraph {
      * @param {Array} params parameters in array format
      */
     sendEventToAllNodes(eventname, params, mode) {
-        mode = mode || LiteGraph.ALWAYS;
+        mode = mode || defaultConfig.ALWAYS;
 
         const nodes = this._nodes_in_order ? this._nodes_in_order : this._nodes;
         if (!nodes) {
@@ -567,7 +571,7 @@ export default class LGraph {
             const node = nodes[j];
 
             if (
-                node.constructor === LiteGraph.Subgraph
+                node.constructor.name === "Subgraph"
                 && eventname !== "onExecute"
             ) {
                 if (node.mode === mode) {
@@ -589,13 +593,12 @@ export default class LGraph {
         }
     }
 
-    sendActionToCanvas(action, params) {
+    sendActionToCanvas(action, params = []) {
         if (!this.list_of_graphcanvas) {
             return;
         }
 
-        for (let i = 0; i < this.list_of_graphcanvas.length; ++i) {
-            const c = this.list_of_graphcanvas[i];
+        for (const c of this.list_of_graphcanvas) {
             if (c[action]) {
                 c[action](...params);
             }
@@ -625,19 +628,19 @@ export default class LGraph {
         }
 
         // nodes
-        if (node.id !== -1 && this._nodes_by_id[node.id] != null) {
+        if (node.id !== -1 && this._nodes_by_id[node.id]) {
             console.warn(
                 "LiteGraph: there is already a node with this ID, changing it",
             );
             node.id = ++this.last_node_id;
         }
 
-        if (this._nodes.length >= LiteGraph.MAX_NUMBER_OF_NODES) {
+        if (this._nodes.length >= defaultConfig.MAX_NUMBER_OF_NODES) {
             throw new Error("LiteGraph: max number of nodes in a graph reached");
         }
 
         // give him an id
-        if (node.id == null || node.id === -1) {
+        if (!node.id || node.id === -1) {
             node.id = ++this.last_node_id;
         } else if (this.last_node_id < node.id) {
             this.last_node_id = node.id;
@@ -670,7 +673,7 @@ export default class LGraph {
      */
 
     remove(node) {
-        if (node.constructor === LiteGraph.LGraphGroup) {
+        if (node.constructor.name === "LGraphGroup") {
             const index = this._groups.indexOf(node);
             if (index !== -1) {
                 this._groups.splice(index, 1);
@@ -705,7 +708,7 @@ export default class LGraph {
         // disconnect outputs
         if (node.outputs) {
             for (let i = 0; i < node.outputs.length; i++) {
-                const slot = node.inputs[i];
+                const slot = node.outputs[i];
                 if (slot.links != null && slot.links.length) {
                     node.disconnectOutput(i);
                 }
@@ -735,9 +738,8 @@ export default class LGraph {
         }
 
         // remove from containers
-        const pos = this._nodes.indexOf(node);
-        if (pos !== -1) {
-            this._nodes.splice(pos, 1);
+        if (this._nodes.includes(node)) {
+            this._nodes = this._nodes.filter(n => n !== node);
         }
         delete this._nodes_by_id[node.id];
 
@@ -866,12 +868,12 @@ export default class LGraph {
      */
     checkNodeTypes() {
         for (let node of this._nodes) {
-            const ctor = LiteGraph.registered_node_types[node.type];
+            const ctor = defaultConfig.registered_node_types[node.type];
             if (node.constructor === ctor) {
                 continue;
             }
             console.log(`node being replaced by newer version: ${node.type}`);
-            const newnode = LiteGraph.createNode(node.type);
+            const newnode = LGraphNode.createNode(node.type);
             node = newnode;
             newnode.configure(node.serialize());
             newnode.graph = this;
@@ -1256,13 +1258,11 @@ export default class LGraph {
 
     /* Called when something visually changed (not the graph!) */
     change() {
-        if (LiteGraph.debug) {
+        if (defaultConfig.debug) {
             console.log("Graph changed");
         }
         this.sendActionToCanvas("setDirty", [true, true]);
-        if (this.on_change) {
-            this.on_change(this);
-        }
+        if (this.on_change) this.on_change(this);
     }
 
     setDirtyCanvas(fg, bg) {
@@ -1331,7 +1331,7 @@ export default class LGraph {
             groups: groupsInfo,
             config: this.config,
             extra: this.extra,
-            version: LiteGraph.VERSION,
+            version: defaultConfig.VERSION,
         };
 
         if (this.onSerialize) this.onSerialize(data);
@@ -1384,9 +1384,9 @@ export default class LGraph {
         this._nodes = [];
         if (nodes) {
             for (const nInfo of nodes) {
-                let node = LiteGraph.createNode(nInfo.type, nInfo.title);
+                let node = LGraphNode.createNode(nInfo.type, nInfo.title);
                 if (!node) {
-                    if (LiteGraph.debug) {
+                    if (defaultConfig.debug) {
                         console.log(
                             `Node not found or has errors: ${nInfo.type}`,
                         );
@@ -1418,7 +1418,7 @@ export default class LGraph {
         this._groups.length = 0;
         if (data.groups) {
             for (const dataGroup of data.groups) {
-                const group = new LiteGraph.LGraphGroup();
+                const group = new LGraphGroup();
                 group.configure(dataGroup);
                 this.add(group);
             }

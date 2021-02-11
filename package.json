@@ -5,7 +5,6 @@
     "main": "build/litegraph.js",
     "module": "build/litegraph.esm.js",
     "browser": "build/litegraph.js",
-    "types": "src/litegraph.d.ts",
     "directories": {
         "doc": "doc"
     },
