@@ -28,7 +28,7 @@
     
 
 
-    <title>Home</title>
+    <title>Function Utils</title>
 
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -101,177 +101,477 @@
 
 <div id="main">
     
+    <h1 id='page-title' class="page-title">Function Utils</h1>
+    
 
     
 
 
 
+
+<section>
+
+
+<header>
+    
+        
+    
+</header>
+
+
+<article>
+    <div class="container-overview">
+    
+        
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="~isValidConnection">
+        <a href="#~isValidConnection">#</a>
+        <span class="type-signature">(inner) </span>isValidConnection<span class="signature">(typeA, typeB)</span><span class="type-signature"> &rarr; {Boolean}</span>
+    </h4>
+
     
 
 
 
+    <div class="description">
+        Returns if the types of two slots are compatible (taking into account wildcards, etc)
+    </div>
 
 
 
 
 
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>typeA</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>typeB</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="utils_function.js.html">utils/function.js</a>, <a href="utils_function.js.html#line61">line 61</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    true if they can be connected
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Boolean</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~wrapFunctionAsNode">
+        <a href="#~wrapFunctionAsNode">#</a>
+        <span class="type-signature">(inner) </span>wrapFunctionAsNode<span class="signature">(name, func, paramType, returnType, properties)</span><span class="type-signature"></span>
+    </h4>
 
     
 
 
-    <section class="readme">
-        <article><h1>litegraph.js</h1>
-<p>A library in Javascript to create graphs in the browser similar to Unreal Blueprints. Nodes can be programmed easily and it includes an editor to construct and tests the graphs.</p>
-<p>It can be integrated easily in any existing web applications and graphs can be run without the need of the editor.</p>
-<p>Try it in the <a href="https://tamats.com/projects/litegraph/editor">demo site</a>.</p>
-<p><img src="imgs/node_graph_example.png" alt="Node Graph" title="WebGLStudio"></p>
-<h2>Features</h2>
-<ul>
-<li>Renders on Canvas2D (zoom in/out and panning, easy to render complex interfaces, can be used inside a WebGLTexture)</li>
-<li>Easy to use editor (searchbox, keyboard shortcuts, multiple selection, context menu, ...)</li>
-<li>Optimized to support hundreds of nodes per graph (on editor but also on execution)</li>
-<li>Customizable theme (colors, shapes, background)</li>
-<li>Callbacks to personalize every action/drawing/event of nodes</li>
-<li>Subgraphs (nodes that contain graphs themselves)</li>
-<li>Live mode system (hides the graph but calls nodes to render whatever they want, useful to create UIs)</li>
-<li>Graphs can be executed in NodeJS</li>
-<li>Highly customizable nodes (color, shape, slots vertical or horizontal, widgets, custom rendering)</li>
-<li>Easy to integrate in any JS application (one single file, no dependencies)</li>
-<li>Typescript support</li>
-</ul>
-<h2>Nodes provided</h2>
-<p>Although it is easy to create new node types, LiteGraph comes with some default nodes that could be useful for many cases:</p>
-<ul>
-<li>Interface (Widgets)</li>
-<li>Math (trigonometry, math operations)</li>
-<li>Audio (AudioAPI and MIDI)</li>
-<li>3D Graphics (Postprocessing in WebGL)</li>
-<li>Input (read Gamepad)</li>
-</ul>
-<h2>Installation</h2>
-<p>You can install it using npm</p>
-<pre class="prettyprint source"><code>npm install litegraph.js
-</code></pre>
-<p>Or downloading the <code>build/litegraph.js</code> and <code>css/litegraph.css</code> version from this repository.</p>
-<h2>First project</h2>
-<pre class="prettyprint source lang-html"><code>&lt;html>
-&lt;head>
-	&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;litegraph.css&quot;>
-	&lt;script type=&quot;text/javascript&quot; src=&quot;litegraph.js&quot;>&lt;/script>
-&lt;/head>
-&lt;body style='width:100%; height:100%'>
-&lt;canvas id='mycanvas' width='1024' height='720' style='border: 1px solid'>&lt;/canvas>
-&lt;script>
-var graph = new LGraph();
 
-var canvas = new LGraphCanvas(&quot;#mycanvas&quot;, graph);
-
-var node_const = LiteGraph.createNode(&quot;basic/const&quot;);
-node_const.pos = [200,200];
-graph.add(node_const);
-node_const.setValue(4.5);
-
-var node_watch = LiteGraph.createNode(&quot;basic/watch&quot;);
-node_watch.pos = [700,200];
-graph.add(node_watch);
-
-node_const.connect(0, node_watch, 0 );
-
-graph.start()
-&lt;/script>
-&lt;/body>
-&lt;/html>
-</code></pre>
-<h2>How to code a new Node type</h2>
-<p>Here is an example of how to build a node that sums two inputs:</p>
-<pre class="prettyprint source lang-javascript"><code>//node constructor class
-function MyAddNode()
-{
-  this.addInput(&quot;A&quot;,&quot;number&quot;);
-  this.addInput(&quot;B&quot;,&quot;number&quot;);
-  this.addOutput(&quot;A+B&quot;,&quot;number&quot;);
-  this.properties = { precision: 1 };
-}
-
-//name to show
-MyAddNode.title = &quot;Sum&quot;;
-
-//function to call when the node is executed
-MyAddNode.prototype.onExecute = function()
-{
-  var A = this.getInputData(0);
-  if( A === undefined )
-    A = 0;
-  var B = this.getInputData(1);
-  if( B === undefined )
-    B = 0;
-  this.setOutputData( 0, A + B );
-}
-
-//register in the system
-LiteGraph.registerNodeType(&quot;basic/sum&quot;, MyAddNode );
-
-</code></pre>
-<p>or you can wrap an existing function:</p>
-<pre class="prettyprint source lang-js"><code>function sum(a,b)
-{
-   return a+b;
-}
-
-LiteGraph.wrapFunctionAsNode(&quot;math/sum&quot;,sum, [&quot;Number&quot;,&quot;Number&quot;],&quot;Number&quot;);
-</code></pre>
-<h2>Server side</h2>
-<p>It also works server-side using NodeJS although some nodes do not work in server (audio, graphics, input, etc).</p>
-<pre class="prettyprint source lang-js"><code>var LiteGraph = require(&quot;./litegraph.js&quot;).LiteGraph;
-
-var graph = new LiteGraph.LGraph();
-
-var node_time = LiteGraph.createNode(&quot;basic/time&quot;);
-graph.add(node_time);
-
-var node_console = LiteGraph.createNode(&quot;basic/console&quot;);
-node_console.mode = LiteGraph.ALWAYS;
-graph.add(node_console);
-
-node_time.connect( 0, node_console, 1 );
-
-graph.start()
-</code></pre>
-<h2>Projects using it</h2>
-<h3><a href="http://webglstudio.org">webglstudio.org</a></h3>
-<p><img src="imgs/webglstudio.gif" alt="WebGLStudio" title="WebGLStudio"></p>
-<h3><a href="http://moiscript.weebly.com/elephant-systegraveme-nodal.html">MOI Elephant</a></h3>
-<p><img src="imgs/elephant.gif" alt="MOI Elephant" title="MOI Elephant"></p>
-<h3>Mynodes</h3>
-<p><img src="imgs/mynodes.png" alt="MyNodes" title="MyNodes"></p>
-<h2>Utils</h2>
-<hr>
-<p>It includes several commands in the utils folder to generate doc, check errors and build minifyed version.</p>
-<h2>Demo</h2>
-<hr>
-<p>The demo includes some examples of graphs. In order to try them you can visit <a href="http://tamats.com/projects/litegraph/editor">demo site</a> or install it on your local computer, to do so you need <code>git</code>, <code>node</code> and <code>npm</code>. Given those dependencies are installed, run the following commands to try it out:</p>
-<pre class="prettyprint source lang-sh"><code>$ git clone git@github.com:jagenjo/litegraph.js.git
-$ cd litegraph.js
-$ npm install
-$ node utils/server.js
-Example app listening on port 80!
-</code></pre>
-<p>Open your browser and point it to http://localhost:8000/. You can select a demo from the dropdown at the top of the page.</p>
-<h2>Feedback</h2>
-<hr>
-<p>You can write any feedback to javi.agenjo@gmail.com</p>
-<h2>Contributors</h2>
-<ul>
-<li>kriffe</li>
-<li>rappestad</li>
-<li>InventivetalentDev</li>
-<li>NateScarlet</li>
-<li>coderofsalvation</li>
-<li>ilyabesk</li>
-</ul></article>
-    </section>
+    <div class="description">
+        Create a new nodetype by passing a function, it wraps it with a proper class and
+generates inputs according to the parameters of the function. Useful to wrap simple
+methods that do not require properties, and that only process some input to generate an
+output.
+    </div>
 
 
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">node name with namespace (p.e.: 'math/sum')</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>func</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>paramType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">[optional] an array containing the type of every parameter,
+    otherwise parameters will accept any type</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>returnType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">[optional] string with the return type, otherwise it will be
+    generic</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>properties</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">[optional] properties to be configurable</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="utils_function.js.html">utils/function.js</a>, <a href="utils_function.js.html#line20">line 20</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
