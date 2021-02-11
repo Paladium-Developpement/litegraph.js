@@ -1,3 +1,7 @@
+/**
+ * @module Time Utils
+ */
+
 export default function getTime() {
     if (performance) return performance.now();
     if (Date && Date.now) return Date.now;

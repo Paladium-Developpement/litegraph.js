@@ -1,0 +1,30 @@
+{
+  "plugins": ["jsdoc-export-default-interop"],
+  "source": {
+    "include": ["src/", "README.md"],
+    "exclude": ["src/index.js", "src/nodes/"]
+  },
+  "opts": {
+    "destination": "doc/",
+    "template": "node_modules/clean-jsdoc-theme",
+    "theme_opts": {
+      "theme": "dark",
+      "menu" : [
+        {
+          "title": "Paladium Website",
+          "link": "https://paladium-pvp.fr/",
+          "target": "_blank"
+        },
+        {
+          "title": "Project GitHub",
+          "link": "https://github.com/Paladium-Developpement/litegraph.js/",
+          "target": "_blank"
+        }
+      ],
+      "overlay_scrollbar": {
+        "option": {}
+      }
+    },
+    "recurse": true
+  }
+}

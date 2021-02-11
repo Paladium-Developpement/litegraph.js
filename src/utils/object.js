@@ -1,3 +1,7 @@
+/**
+ * @module Object Utils
+ */
+
 // separated just to improve if it doesn't work
 export default function cloneObject(obj, target) {
     if (obj == null) return null;

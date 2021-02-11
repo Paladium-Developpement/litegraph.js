@@ -1,3 +1,12 @@
+/**
+ * @class LLink
+ * @param id
+ * @param type
+ * @param origin_id
+ * @param origin_slot
+ * @param target_id
+ * @param target_slot
+ */
 export default class LLink {
     constructor(id, type, origin_id, origin_slot, target_id, target_slot) {
         this.id = id;

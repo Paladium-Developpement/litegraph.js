@@ -1,6 +1,9 @@
 import LGraphNode from "./LGraphNode";
-import defaultConfig from "./utils/defaultConfig";
 
+/**
+ * @class LGraphGroup
+ * @param title
+ */
 export default class LGraphGroup {
     constructor(title) {
         this._ctor(title);

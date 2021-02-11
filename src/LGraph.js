@@ -46,10 +46,11 @@ export default class LGraph {
     /**
      * Removes all nodes from this graph
      * @method clear
+     * @memberOf LGraph
      */
     clear() {
         this.stop();
-        this.status = LGraph.STATUS_STOPPED;
+        this.status = computeExecutionOrderLGraph.STATUS_STOPPED;
 
         this.last_node_id = 0;
         this.last_link_id = 0;
@@ -108,6 +109,7 @@ export default class LGraph {
      * Attach Canvas to this graph
      * @method attachCanvas
      * @param {GraphCanvas} graphcanvas
+     * @memberOf LGraph
      */
     attachCanvas(graphcanvas) {
         if (graphcanvas.constructor !== LGraphCanvas) {
@@ -127,6 +129,7 @@ export default class LGraph {
      * Detach Canvas from this graph
      * @method detachCanvas
      * @param {GraphCanvas} graphcanvas
+     * @memberOf LGraph
      */
     detachCanvas(graphcanvas) {
         if (!this.list_of_graphcanvas) {
@@ -146,6 +149,7 @@ export default class LGraph {
      * @method start
      * @param {number} interval amount of milliseconds between executions, if 0 then it renders to
      *     the monitor refresh rate
+     * @memberOf LGraph
      */
     start(interval) {
         if (this.status === LGraph.STATUS_RUNNING) {
@@ -193,6 +197,7 @@ export default class LGraph {
     /**
      * Stops the execution loop of the graph
      * @method stop execution
+     * @memberOf LGraph
      */
     stop() {
         if (this.status === LGraph.STATUS_STOPPED) {
@@ -221,6 +226,7 @@ export default class LGraph {
      * @param {number} num number of steps to run, default is 1
      * @param {Boolean} doNotCatchError [optional] if you want to try/catch errors
      * @param {number} limit max number of nodes to execute (used to execute from start to a node)
+     * @memberOf LGraph
      */
     runStep(num, doNotCatchError, limit) {
         num = num || 1;
@@ -305,6 +311,7 @@ export default class LGraph {
      * Updates the graph execution order according to relevance of the nodes (nodes with only
      * outputs have more relevance than nodes with only inputs.
      * @method updateExecutionOrder
+     * @memberOf LGraph
      */
     updateExecutionOrder() {
         this._nodes_in_order = this.computeExecutionOrder(false);
@@ -322,6 +329,7 @@ export default class LGraph {
      * @param setLevel
      * @returns {this}
      * @internal
+     * @memberOf LGraph
      */
     computeExecutionOrder(onlyOnExecute, setLevel) {
         let L = [];
@@ -454,6 +462,7 @@ export default class LGraph {
      * Returns all the nodes that could affect this one (ancestors) by crawling all the inputs
      * recursively. It doesn't include the node itself
      * @method getAncestors
+     * @memberOf LGraph
      * @return {Array} an array with all the LGraphNodes that affect this node, in order of
      *     execution
      */
@@ -488,6 +497,7 @@ export default class LGraph {
     /**
      * Positions every node in a more readable manner
      * @method arrange
+     * @memberOf LGraph
      */
     arrange(margin) {
         margin = margin || 100;
@@ -526,6 +536,7 @@ export default class LGraph {
      * Returns the amount of time the graph has been running in milliseconds
      * @method getTime
      * @return {number} number of milliseconds the graph has been running
+     * @memberOf LGraph
      */
     getTime() {
         return this.globaltime;
@@ -536,6 +547,7 @@ export default class LGraph {
      * context where the time increments should be constant
      * @method getFixedTime
      * @return {number} number of milliseconds the graph has been running
+     * @memberOf LGraph
      */
 
     getFixedTime() {
@@ -547,6 +559,7 @@ export default class LGraph {
      * this number could be not correct if the nodes are using graphical actions
      * @method getElapsedTime
      * @return {number} number of milliseconds it took the last cycle
+     * @memberOf LGraph
      */
 
     getElapsedTime() {
@@ -558,6 +571,7 @@ export default class LGraph {
      * @method sendEventToAllNodes
      * @param {String} eventname the name of the event (function to be called)
      * @param {Array} params parameters in array format
+     * @memberOf LGraph
      */
     sendEventToAllNodes(eventname, params, mode) {
         mode = mode || defaultConfig.ALWAYS;
@@ -610,6 +624,7 @@ export default class LGraph {
      * @method add
      * @param {LGraphNode} node the instance of the node
      * @param {boolean} skipComputeOrder
+     * @memberOf LGraph
      */
 
     add(node, skipComputeOrder) {
@@ -670,6 +685,7 @@ export default class LGraph {
      * Removes a node from the graph
      * @method remove
      * @param {LGraphNode} node the instance of the node
+     * @memberOf LGraph
      */
 
     remove(node) {
@@ -761,6 +777,7 @@ export default class LGraph {
      * Returns a node by its id.
      * @method getNodeById
      * @param {Number} id
+     * @memberOf LGraph
      */
 
     getNodeById(id) {
@@ -776,6 +793,7 @@ export default class LGraph {
      * @param {Class} classObject the class itself (not an string)
      * @param {Array} result
      * @return {Array} a list with all the nodes of this type
+     * @memberOf LGraph
      */
     findNodesByClass(classObject, result = []) {
         result.length = 0;
@@ -791,6 +809,7 @@ export default class LGraph {
      * @param {String} type the name of the node type
      * @param {Array} result
      * @return {Array} a list with all the nodes of this type
+     * @memberOf LGraph
      */
     findNodesByType(type, result = []) {
         type = type.toLowerCase();
@@ -807,6 +826,7 @@ export default class LGraph {
      * @method findNodeByTitle
      * @param {String} title the name of the node to search
      * @return {Node} the node or null
+     * @memberOf LGraph
      */
     findNodeByTitle(title) {
         for (const node of this._nodes) {
@@ -820,6 +840,7 @@ export default class LGraph {
      * @method findNodesByTitle
      * @param {String} title the name of the node to search
      * @return {Array} a list with all the nodes with this name
+     * @memberOf LGraph
      */
     findNodesByTitle(title) {
         const result = [];
@@ -838,6 +859,7 @@ export default class LGraph {
      *     nodes in the graph
      * @param {number} margin
      * @return {LGraphNode} the node at this position or null
+     * @memberOf LGraph
      */
     getNodeOnPos(x, y, nodesList = this._nodes, margin) {
         for (const n of nodesList) {
@@ -852,6 +874,7 @@ export default class LGraph {
      * @param {number} x the x coordinate in canvas space
      * @param {number} y the y coordinate in canvas space
      * @return {LGraphGroup} the group or null
+     * @memberOf LGraph
      */
     getGroupOnPos(x, y) {
         for (const g of this._groups) {
@@ -865,6 +888,7 @@ export default class LGraph {
      * by a newer version during execution this replaces the ones using the old version with the
      * new version
      * @method checkNodeTypes
+     * @memberOf LGraph
      */
     checkNodeTypes() {
         for (let node of this._nodes) {
@@ -887,8 +911,6 @@ export default class LGraph {
         }
         this.updateExecutionOrder();
     }
-
-    // ********** GLOBALS *****************
 
     onAction(action, param) {
         this._input_nodes = this.findNodesByClass(
@@ -916,6 +938,7 @@ export default class LGraph {
      * @param {String} name
      * @param {String} type
      * @param {*} value [optional]
+     * @memberOf LGraph
      */
     addInput(name, type, value) {
         const input = this.inputs[name];
@@ -947,6 +970,7 @@ export default class LGraph {
      * @method setGlobalInputData
      * @param {String} name
      * @param {*} data
+     * @memberOf LGraph
      */
     setInputData(name, data) {
         const input = this.inputs[name];
@@ -961,6 +985,7 @@ export default class LGraph {
      * @method getInputData
      * @param {String} name
      * @return {*} the data
+     * @memberOf LGraph
      */
     getInputData(name) {
         const input = this.inputs[name];
@@ -975,6 +1000,7 @@ export default class LGraph {
      * @method renameInput
      * @param {String} oldName
      * @param {String} new_name
+     * @memberOf LGraph
      */
     renameInput(oldName, newName) {
         if (newName === oldName) {
@@ -1008,6 +1034,7 @@ export default class LGraph {
      * @method changeInputType
      * @param {String} name
      * @param {String} type
+     * @memberOf LGraph
      */
     changeInputType(name, type) {
         if (!this.inputs[name]) {
@@ -1033,6 +1060,7 @@ export default class LGraph {
      * Removes a global graph input
      * @method removeInput
      * @param {String} name
+     * @memberOf LGraph
      */
     removeInput(name) {
         if (!this.inputs[name]) {
@@ -1058,6 +1086,7 @@ export default class LGraph {
      * @param {String} name
      * @param {String} type
      * @param {*} value
+     * @memberOf LGraph
      */
     addOutput(name, type, value) {
         this.outputs[name] = {
@@ -1081,6 +1110,7 @@ export default class LGraph {
      * @method setOutputData
      * @param {String} name
      * @param {String} value
+     * @memberOf LGraph
      */
     setOutputData(name, value) {
         const output = this.outputs[name];
@@ -1095,6 +1125,7 @@ export default class LGraph {
      * @method getOutputData
      * @param {String} name
      * @return {*} the data
+     * @memberOf LGraph
      */
     getOutputData(name) {
         const output = this.outputs[name];
@@ -1109,6 +1140,7 @@ export default class LGraph {
      * @method renameOutput
      * @param {String} oldName
      * @param {String} newName
+     * @memberOf LGraph
      */
     renameOutput(oldName, newName) {
         if (!this.outputs[oldName]) {
@@ -1138,6 +1170,7 @@ export default class LGraph {
      * @method changeOutputType
      * @param {String} name
      * @param {String} type
+     * @memberOf LGraph
      */
     changeOutputType(name, type) {
         if (!this.outputs[name]) {
@@ -1163,6 +1196,7 @@ export default class LGraph {
      * Removes a global graph output
      * @method removeOutput
      * @param {String} name
+     * @memberOf LGraph
      */
     removeOutput(name) {
         if (!this.outputs[name]) {
@@ -1223,6 +1257,7 @@ export default class LGraph {
     /**
      * returns if the graph is in live mode
      * @method isLive
+     * @memberOf LGraph
      */
 
     isLive() {
@@ -1242,6 +1277,7 @@ export default class LGraph {
     /**
      * clears the triggered slot animation in all links (stop visual animation)
      * @method clearTriggeredSlots
+     * @memberOf LGraph
      */
     clearTriggeredSlots() {
         // eslint-disable-next-line guard-for-in,no-restricted-syntax
@@ -1273,6 +1309,7 @@ export default class LGraph {
      * Destroys a link
      * @method removeLink
      * @param {Number} linkId
+     * @memberOf LGraph
      */
     removeLink(linkId) {
         const link = this.links[linkId];
@@ -1290,6 +1327,7 @@ export default class LGraph {
      * Creates a Object containing all the info about this graph, it can be serialized
      * @method serialize
      * @return {Object} value of the node
+     * @memberOf LGraph
      */
     serialize() {
         const nodesInfo = [];
@@ -1344,6 +1382,7 @@ export default class LGraph {
      * @method configure
      * @param {String} str configure a graph from a JSON string
      * @param {Boolean} returns if there was any error parsing
+     * @memberOf LGraph
      */
     configure(data, keepOld) {
         if (!data) {
@@ -1471,10 +1510,11 @@ export default class LGraph {
 
     /**
      * Node event manager
-     * @todo
+     * @todo Need create event
      * @param node
      * @param msg
      * @param color
+     * @memberOf LGraph
      */
     onNodeTrace(node, msg, color) {
         // TODO

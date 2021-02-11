@@ -1,3 +1,6 @@
+/**
+ * @module File Utils
+ */
 import defaultConfig from "./defaultConfig";
 
 export function getFileExtension(url) {

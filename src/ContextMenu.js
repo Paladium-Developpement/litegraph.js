@@ -1,17 +1,16 @@
+/**
+ * ContextMenu from LiteGUI
+ * @class ContextMenu
+ * @constructor
+ * @param {Array} values (allows object { title: "Nice text", callback: function ... })
+ * @param {Object} options [optional] Some options:\
+ * - title: title to show on top of the menu
+ * - callback: function to call when an option is clicked, it receives the item information
+ * - ignore_item_callbacks: ignores the callback inside the item, it just calls the
+ *     options.callback
+ * - event: you can pass a MouseEvent, this way the ContextMenu appears in that position
+ */
 export default class ContextMenu {
-    /**
-     * ContextMenu from LiteGUI
-     *
-     * @class ContextMenu
-     * @constructor
-     * @param {Array} values (allows object { title: "Nice text", callback: function ... })
-     * @param {Object} options [optional] Some options:\
-     * - title: title to show on top of the menu
-     * - callback: function to call when an option is clicked, it receives the item information
-     * - ignore_item_callbacks: ignores the callback inside the item, it just calls the
-     *     options.callback
-     * - event: you can pass a MouseEvent, this way the ContextMenu appears in that position
-     */
     constructor(values, options = {}) {
         this.options = options;
         const that = this;

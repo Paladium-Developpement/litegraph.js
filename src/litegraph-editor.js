@@ -2,6 +2,11 @@
 import LGraph from "./LGraph";
 import LGraphCanvas from "./LGraphCanvas";
 
+/**
+ * @class Editor
+ * @param containerId
+ * @param options
+ */
 export default class Editor {
     constructor(containerId, options) {
         options = options || {};

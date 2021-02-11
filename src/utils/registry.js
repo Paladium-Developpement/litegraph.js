@@ -1,4 +1,8 @@
 /**
+ * @module Registry Manager
+ */
+
+/**
  * removes a node type from the system
  * @method unregisterNodeType
  * @param {String|Object} type name of the node or the node constructor itself

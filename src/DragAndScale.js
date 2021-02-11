@@ -1,3 +1,8 @@
+/**
+ * @class DragAndScale
+ * @param element
+ * @param skipEvents
+ */
 export default class DragAndScale {
     constructor(element, skipEvents) {
         this.offset = new Float32Array([0, 0]);

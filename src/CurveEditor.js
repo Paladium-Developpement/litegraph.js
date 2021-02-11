@@ -1,3 +1,7 @@
+/**
+ * @class CurveEditor
+ * @param points
+ */
 export default class CurveEditor {
     constructor(points) {
         this.points = points;

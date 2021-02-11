@@ -1,7 +1,10 @@
-// used to create nodes from wrapping functions
+/**
+ * @module Function Utils
+ */
 import defaultConfig from "./defaultConfig";
 import { registerNodeType } from "./registry";
 
+// used to create nodes from wrapping function
 export function getParameterNames(func) {
     return (`${func}`)
         .replace(/[/][/].*$/gm, "") // strip single-line comments
