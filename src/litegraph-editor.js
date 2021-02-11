@@ -108,14 +108,14 @@ export default class Editor {
         miniwindow.style.top = "4px";
         miniwindow.style.right = "4px";
 
-        const close_button = document.createElement("div");
-        close_button.className = "corner-button";
-        close_button.innerHTML = "&#10060;";
-        close_button.addEventListener("click", (e) => {
+        const closeBouton = document.createElement("div");
+        closeBouton.className = "corner-button";
+        closeBouton.innerHTML = "&#10060;";
+        closeBouton.addEventListener("click", (e) => {
             graphcanvas.setGraph(null);
             miniwindow.remove();
         });
-        miniwindow.appendChild(close_button);
+        miniwindow.appendChild(closeBouton);
 
         this.root.querySelector(".content").appendChild(miniwindow);
     }
