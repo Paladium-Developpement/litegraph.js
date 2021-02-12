@@ -4,6 +4,39 @@
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.LiteGraph = {}));
 }(this, (function (exports) { 'use strict';
 
+  function styleInject(css, ref) {
+    if ( ref === void 0 ) ref = {};
+    var insertAt = ref.insertAt;
+
+    if (!css || typeof document === 'undefined') { return; }
+
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var style = document.createElement('style');
+    style.type = 'text/css';
+
+    if (insertAt === 'top') {
+      if (head.firstChild) {
+        head.insertBefore(style, head.firstChild);
+      } else {
+        head.appendChild(style);
+      }
+    } else {
+      head.appendChild(style);
+    }
+
+    if (style.styleSheet) {
+      style.styleSheet.cssText = css;
+    } else {
+      style.appendChild(document.createTextNode(css));
+    }
+  }
+
+  var css_248z = "/* this CSS contains only the basic CSS needed to run the app and use it */\n\n.lgraphcanvas {\n    /*cursor: crosshair;*/\n    user-select: none;\n    -moz-user-select: none;\n    -webkit-user-select: none;\n\toutline: none;\n}\n\n.litegraph.litecontextmenu {\n    font-family: Tahoma, sans-serif;\n    position: fixed;\n    top: 100px;\n    left: 100px;\n    min-width: 100px;\n    color: #aaf;\n    padding: 0;\n    box-shadow: 0 0 10px black !important;\n    background-color: #2e2e2e !important;\n\tz-index: 10;\n}\n\n.litegraph.litecontextmenu.dark {\n    background-color: #000 !important;\n}\n\n.litegraph.litecontextmenu .litemenu-title img {\n    margin-top: 2px;\n    margin-left: 2px;\n    margin-right: 4px;\n}\n\n.litegraph.litecontextmenu .litemenu-entry {\n    margin: 2px;\n    padding: 2px;\n}\n\n.litegraph.litecontextmenu .litemenu-entry.submenu {\n    background-color: #2e2e2e !important;\n}\n\n.litegraph.litecontextmenu.dark .litemenu-entry.submenu {\n    background-color: #000 !important;\n}\n\n.litegraph .litemenubar ul {\n    font-family: Tahoma, sans-serif;\n    margin: 0;\n    padding: 0;\n}\n\n.litegraph .litemenubar li {\n    font-size: 14px;\n    color: #999;\n    display: inline-block;\n    min-width: 50px;\n    padding-left: 10px;\n    padding-right: 10px;\n    user-select: none;\n    -moz-user-select: none;\n    -webkit-user-select: none;\n    cursor: pointer;\n}\n\n.litegraph .litemenubar li:hover {\n    background-color: #777;\n    color: #eee;\n}\n\n.litegraph .litegraph .litemenubar-panel {\n    position: absolute;\n    top: 5px;\n    left: 5px;\n    min-width: 100px;\n    background-color: #444;\n    box-shadow: 0 0 3px black;\n    padding: 4px;\n    border-bottom: 2px solid #aaf;\n    z-index: 10;\n}\n\n.litegraph .litemenu-entry,\n.litemenu-title {\n    font-size: 12px;\n    color: #aaa;\n    padding: 0 0 0 4px;\n    margin: 2px;\n    padding-left: 2px;\n    -moz-user-select: none;\n    -webkit-user-select: none;\n    user-select: none;\n    cursor: pointer;\n}\n\n.litegraph .litemenu-entry .icon {\n    display: inline-block;\n    width: 12px;\n    height: 12px;\n    margin: 2px;\n    vertical-align: top;\n}\n\n.litegraph .litemenu-entry.checked .icon {\n    background-color: #aaf;\n}\n\n.litegraph .litemenu-entry .more {\n    float: right;\n    padding-right: 5px;\n}\n\n.litegraph .litemenu-entry.disabled {\n    opacity: 0.5;\n    cursor: default;\n}\n\n.litegraph .litemenu-entry.separator {\n    display: block;\n    border-top: 1px solid #333;\n    border-bottom: 1px solid #666;\n    width: 100%;\n    height: 0px;\n    margin: 3px 0 2px 0;\n    background-color: transparent;\n    padding: 0 !important;\n    cursor: default !important;\n}\n\n.litegraph .litemenu-entry.has_submenu {\n    border-right: 2px solid cyan;\n}\n\n.litegraph .litemenu-title {\n    color: #dde;\n    background-color: #111;\n    margin: 0;\n    padding: 2px;\n    cursor: default;\n}\n\n.litegraph .litemenu-entry:hover:not(.disabled):not(.separator) {\n    background-color: #444 !important;\n    color: #eee;\n    transition: all 0.2s;\n}\n\n.litegraph .litemenu-entry .property_name {\n    display: inline-block;\n    text-align: left;\n    min-width: 80px;\n    min-height: 1.2em;\n}\n\n.litegraph .litemenu-entry .property_value {\n    display: inline-block;\n    background-color: rgba(0, 0, 0, 0.5);\n    text-align: right;\n    min-width: 80px;\n    min-height: 1.2em;\n    vertical-align: middle;\n    padding-right: 10px;\n}\n\n.litegraph.litesearchbox {\n    font-family: Tahoma, sans-serif;\n    position: absolute;\n    background-color: rgba(0, 0, 0, 0.5);\n    padding-top: 4px;\n}\n\n.litegraph.litesearchbox input,\n.litegraph.litesearchbox select {\n    margin-top: 3px;\n    min-width: 60px;\n    min-height: 1.5em;\n    background-color: black;\n    border: 0;\n    color: white;\n    padding-left: 10px;\n    margin-right: 5px;\n}\n\n.litegraph.litesearchbox .name {\n    display: inline-block;\n    min-width: 60px;\n    min-height: 1.5em;\n    padding-left: 10px;\n}\n\n.litegraph.litesearchbox .helper {\n    overflow: auto;\n    max-height: 200px;\n    margin-top: 2px;\n}\n\n.litegraph.lite-search-item {\n    font-family: Tahoma, sans-serif;\n    background-color: rgba(0, 0, 0, 0.5);\n    color: white;\n    padding-top: 2px;\n}\n\n.litegraph.lite-search-item:hover,\n.litegraph.lite-search-item.selected {\n    cursor: pointer;\n    background-color: white;\n    color: black;\n}\n\n/* DIALOGs ******/\n\n.litegraph .dialog {\n    position: absolute;\n    top: 50%;\n    left: 50%;\n    margin-top: -150px;\n    margin-left: -200px;\n\n    background-color: #2A2A2A;\n\n    min-width: 400px;\n    min-height: 200px;\n\tbox-shadow: 0 0 4px #111;\n    border-radius: 6px;\n}\n\n.litegraph .dialog.settings {\n\tleft: 10px;\n\ttop: 10px;\n\theight: calc( 100% - 20px );\n\tmargin: auto;\n}\n\n.litegraph .dialog .close {\n    float: right;\n\tmargin: 4px;\n\tmargin-right: 10px;\n\tcursor: pointer;\n\tfont-size: 1.4em;\n}\n\n.litegraph .dialog .close:hover {\n\tcolor: white;\n}\n\n.litegraph .dialog .dialog-header {\n\tcolor: #AAA;\n\tborder-bottom: 1px solid #161616;\n}\n\n.litegraph .dialog .dialog-header { height: 40px; }\n.litegraph .dialog .dialog-footer { height: 50px; padding: 10px; border-top: 1px solid #1a1a1a;}\n\n.litegraph .dialog .dialog-header .dialog-title {\n    font: 20px \"Arial\";\n    margin: 4px;\n    padding: 4px 10px;\n    display: inline-block;\n}\n\n.litegraph .dialog .dialog-content {\n    height: calc(100% - 90px);\n    width: 100%;\n\tmin-height: 100px;\n    display: inline-block;\n\tcolor: #AAA;\n    /*background-color: black;*/\n}\n\n.litegraph .dialog .dialog-content h3 {\n\tmargin: 10px;\n}\n\n.litegraph .dialog .dialog-content .connections {\n\tflex-direction: row;\n}\n\n.litegraph .dialog .dialog-content .connections .connections_side {\n\twidth: calc(50% - 5px);\n\tmin-height: 100px;\n\tbackground-color: black;\n\tdisplay: flex;\n}\n\n.litegraph .dialog .node_type {\n\tfont-size: 1.2em;\n\tdisplay: block;\n\tmargin: 10px;\n}\n\n.litegraph .dialog .node_desc {\n\topacity: 0.5;\n\tdisplay: block;\n\tmargin: 10px;\n}\n\n.litegraph .dialog .separator {\n\tdisplay: block;\n\twidth: calc( 100% - 4px );\n\theight: 1px;\n\tborder-top: 1px solid #000;\n\tborder-bottom: 1px solid #333;\n\tmargin: 10px 2px;\n\tpadding: 0;\n}\n\n.litegraph .dialog .property {\n\tmargin-bottom: 2px;\n\tpadding: 4px;\n}\n\n.litegraph .dialog .property_name {\n\tcolor: #737373;\n    display: inline-block;\n    text-align: left;\n    vertical-align: top;\n    width: 120px;\n\tpadding-left: 4px;\n\toverflow: hidden;\n}\n\n.litegraph .dialog .property_value {\n    display: inline-block;\n    text-align: right;\n\tcolor: #AAA;\n\tbackground-color: #1A1A1A;\n    width: calc( 100% - 122px );\n\tmax-height: 300px;\n    padding: 4px;\n\tpadding-right: 12px;\n\toverflow: hidden;\n\tcursor: pointer;\n\tborder-radius: 3px;\n}\n\n.litegraph .dialog .property_value:hover {\n\tcolor: white;\n}\n\n.litegraph .dialog .property.boolean .property_value {\n\tpadding-right: 30px;\n}\n\n.litegraph .dialog .btn {\n\tborder-radius: 4px;\n    padding: 4px 20px;\n    margin-left: 0px;\n    background-color: #060606;\n    color: #8e8e8e;\n}\n\n.litegraph .dialog .btn:hover {\n    background-color: #111;\n    color: #FFF;\n}\n\n.litegraph .dialog .btn.delete:hover {\n    background-color: #F33;\n    color: black;\n}\n\n.litegraph .subgraph_property {\n\tpadding: 4px;\n}\n\n.litegraph .subgraph_property:hover {\n\tbackground-color: #333;\n}\n\n.litegraph .subgraph_property.extra {\n    margin-top: 8px;\n}\n\n.litegraph .subgraph_property span.name {\n\tfont-size: 1.3em;\n\tpadding-left: 4px;\n}\n\n.litegraph .subgraph_property span.type {\n\topacity: 0.5;\n\tmargin-right: 20px;\n\tpadding-left: 4px;\n}\n\n.litegraph .subgraph_property span.label {\n\tdisplay: inline-block;\n\twidth: 60px;\n\tpadding:  0px 10px;\n}\n\n.litegraph .subgraph_property input {\n\twidth: 140px;\n\tcolor: #999;\n\tbackground-color: #1A1A1A;\n\tborder-radius: 4px;\n\tborder: 0;\n\tmargin-right: 10px;\n\tpadding: 4px;\n\tpadding-left: 10px;\n}\n\n.litegraph .subgraph_property button {\n\tbackground-color: #1c1c1c;\n\tcolor: #aaa;\n\tborder: 0;\n\tborder-radius: 2px;\n\tpadding: 4px 10px;\n\tcursor: pointer;\n}\n\n.litegraph .subgraph_property.extra {\n\tcolor: #ccc;\n}\n\n.litegraph .subgraph_property.extra input {\n\tbackground-color: #111;\n}\n\n.litegraph .bullet_icon {\n\tmargin-left: 10px;\n\tborder-radius: 10px;\n\twidth: 12px;\n\theight: 12px;\n\tbackground-color: #666;\n\tdisplay: inline-block;\n\tmargin-top: 2px;\n\tmargin-right: 4px;\n    transition: background-color 0.1s ease 0s;\n    -moz-transition: background-color 0.1s ease 0s;\n}\n\n.litegraph .bullet_icon:hover {\n\tbackground-color: #698;\n\tcursor: pointer;\n} \n\n/* OLD */\n\n.graphcontextmenu {\n    padding: 4px;\n    min-width: 100px;\n}\n\n.graphcontextmenu-title {\n    color: #dde;\n    background-color: #222;\n    margin: 0;\n    padding: 2px;\n    cursor: default;\n}\n\n.graphmenu-entry {\n    box-sizing: border-box;\n    margin: 2px;\n    padding-left: 20px;\n    user-select: none;\n    -moz-user-select: none;\n    -webkit-user-select: none;\n    transition: all linear 0.3s;\n}\n\n.graphmenu-entry.event,\n.litemenu-entry.event {\n    border-left: 8px solid orange;\n    padding-left: 12px;\n}\n\n.graphmenu-entry.disabled {\n    opacity: 0.3;\n}\n\n.graphmenu-entry.submenu {\n    border-right: 2px solid #eee;\n}\n\n.graphmenu-entry:hover {\n    background-color: #555;\n}\n\n.graphmenu-entry.separator {\n    background-color: #111;\n    border-bottom: 1px solid #666;\n    height: 1px;\n    width: calc(100% - 20px);\n    -moz-width: calc(100% - 20px);\n    -webkit-width: calc(100% - 20px);\n}\n\n.graphmenu-entry .property_name {\n    display: inline-block;\n    text-align: left;\n    min-width: 80px;\n    min-height: 1.2em;\n}\n\n.graphmenu-entry .property_value,\n.litemenu-entry .property_value {\n    display: inline-block;\n    background-color: rgba(0, 0, 0, 0.5);\n    text-align: right;\n    min-width: 80px;\n    min-height: 1.2em;\n    vertical-align: middle;\n    padding-right: 10px;\n}\n\n.graphdialog {\n    position: absolute;\n    top: 10px;\n    left: 10px;\n    /*min-height: 2em;*/\n    background-color: #333;\n    font-size: 1.2em;\n    box-shadow: 0 0 10px black !important;\n\tz-index: 10;\n}\n\n.graphdialog.rounded {\n    border-radius: 12px;\n    padding-right: 2px;\n}\n\n.graphdialog .name {\n    display: inline-block;\n    min-width: 60px;\n    min-height: 1.5em;\n    padding-left: 10px;\n}\n\n.graphdialog input,\n.graphdialog textarea,\n.graphdialog select {\n    margin: 3px;\n    min-width: 60px;\n    min-height: 1.5em;\n    background-color: black;\n    border: 0;\n    color: white;\n    padding-left: 10px;\n    outline: none;\n}\n\n.graphdialog textarea {\n\tmin-height: 150px;\n}\n\n.graphdialog button {\n    margin-top: 3px;\n    vertical-align: top;\n    background-color: #999;\n\tborder: 0;\n}\n\n.graphdialog button.rounded,\n.graphdialog input.rounded {\n    border-radius: 0 12px 12px 0;\n}\n\n.graphdialog .helper {\n    overflow: auto;\n    max-height: 200px;\n}\n\n.graphdialog .help-item {\n    padding-left: 10px;\n}\n\n.graphdialog .help-item:hover,\n.graphdialog .help-item.selected {\n    cursor: pointer;\n    background-color: white;\n    color: black;\n}\n";
+  styleInject(css_248z);
+
+  var css_248z$1 = ".litegraph-editor {\r\n    width: 100%;\r\n    height: 100%;\r\n    margin: 0;\r\n    padding: 0;\r\n\r\n    background-color: #333;\r\n    color: #eee;\r\n    font: 14px Tahoma;\r\n\r\n    position: relative;\r\n\r\n    overflow: hidden;\r\n}\r\n\r\n.litegraph-editor h1 {\r\n    font-family: \"Metro Light\", Tahoma;\r\n    color: #ddd;\r\n    font-size: 28px;\r\n    padding-left: 10px;\r\n    /*text-shadow: 0 1px 1px #333, 0 -1px 1px #777;*/\r\n    margin: 0;\r\n    font-weight: normal;\r\n}\r\n\r\n.litegraph-editor h1 span {\r\n    font-family: \"Arial\";\r\n    font-size: 14px;\r\n    font-weight: normal;\r\n    color: #aaa;\r\n}\r\n\r\n.litegraph-editor h2 {\r\n    font-family: \"Metro Light\";\r\n    padding: 5px;\r\n    margin-left: 10px;\r\n}\r\n\r\n.litegraph-editor * {\r\n    box-sizing: border-box;\r\n    -moz-box-sizing: border-box;\r\n}\r\n\r\n.litegraph-editor .content {\r\n    position: relative;\r\n    width: 100%;\r\n    height: 100%;\r\n    background-color: #1a1a1a;\r\n}\r\n\r\n.litegraph-editor .header,\r\n.litegraph-editor .footer {\r\n    position: relative;\r\n    height: 40px;\r\n    background-color: #333;\r\n    /*border-radius: 10px 10px 0 0;*/\r\n}\r\n\r\n.litegraph-editor .tools,\r\n.litegraph-editor .tools-left,\r\n.litegraph-editor .tools-right {\r\n    position: absolute;\r\n    top: 2px;\r\n    right: 0px;\r\n    vertical-align: top;\r\n\r\n    margin: 2px 5px 0 0px;\r\n}\r\n\r\n.litegraph-editor .tools-left {\r\n    right: auto;\r\n    left: 4px;\r\n}\r\n\r\n.litegraph-editor .footer {\r\n    height: 40px;\r\n    position: relative;\r\n    /*border-radius: 0 0 10px 10px;*/\r\n}\r\n\r\n.litegraph-editor .miniwindow {\r\n    background-color: #333;\r\n    border: 1px solid #111;\r\n}\r\n\r\n.litegraph-editor .miniwindow .corner-button {\r\n    position: absolute;\r\n    top: 2px;\r\n    right: 2px;\r\n    font-family: \"Tahoma\";\r\n    font-size: 14px;\r\n    color: #aaa;\r\n    cursor: pointer;\r\n}\r\n\r\n/* BUTTONS **********************/\r\n\r\n.litegraph-editor .btn {\r\n    /*font-family: \"Metro Light\";*/\r\n    color: #ccc;\r\n    font-size: 20px;\r\n    min-width: 30px;\r\n    /*border-radius: 0.3em;*/\r\n    border: 0 solid #666;\r\n    background-color: #3f3f3f;\r\n    /*box-shadow: 0 0 3px black;*/\r\n    padding: 4px 10px;\r\n    cursor: pointer;\r\n    transition: all 1s;\r\n    -moz-transition: all 1s;\r\n    -webkit-transition: all 0.4s;\r\n}\r\n\r\n.litegraph-editor button:hover {\r\n    background-color: #999;\r\n    color: #fff;\r\n    transition: all 1s;\r\n    -moz-transition: all 1s;\r\n    -webkit-transition: all 0.4s;\r\n}\r\n\r\n.litegraph-editor button:active {\r\n    background-color: white;\r\n}\r\n\r\n.litegraph-editor button.fixed {\r\n    position: absolute;\r\n    top: 5px;\r\n    right: 5px;\r\n    font-size: 1.2em;\r\n}\r\n\r\n.litegraph-editor button img {\r\n    margin: -4px;\r\n    vertical-align: top;\r\n    opacity: 0.8;\r\n    transition: all 1s;\r\n}\r\n\r\n.litegraph-editor button:hover img {\r\n    opacity: 1;\r\n}\r\n\r\n.litegraph-editor .header button {\r\n    height: 32px;\r\n    vertical-align: top;\r\n}\r\n\r\n.litegraph-editor .footer button {\r\n    /*font-size: 16px;*/\r\n}\r\n\r\n.litegraph-editor .toolbar-widget {\r\n    display: inline-block;\r\n}\r\n\r\n.litegraph-editor .editor-area {\r\n    width: 100%;\r\n    height: 100%;\r\n}\r\n\r\n/* METER *********************/\r\n\r\n.litegraph-editor .loadmeter {\r\n    font-family: \"Tahoma\";\r\n    color: #aaa;\r\n    font-size: 12px;\r\n    border-radius: 2px;\r\n    width: 130px;\r\n    vertical-align: top;\r\n}\r\n\r\n.litegraph-editor .strong {\r\n    vertical-align: top;\r\n    padding: 3px;\r\n    width: 30px;\r\n    display: inline-block;\r\n    line-height: 8px;\r\n}\r\n\r\n.litegraph-editor .cpuload .bgload,\r\n.litegraph-editor .gpuload .bgload {\r\n    display: inline-block;\r\n    width: 90px;\r\n    height: 15px;\r\n    background-image: url(\"../editor/imgs/load-progress-empty.png\");\r\n}\r\n\r\n.litegraph-editor .cpuload .fgload,\r\n.litegraph-editor .gpuload .fgload {\r\n    display: inline-block;\r\n    width: 4px;\r\n    height: 15px;\r\n    max-width: 90px;\r\n    background-image: url(\"../editor/imgs/load-progress-full.png\");\r\n}\r\n\r\n.litegraph-editor textarea.code, .litegraph-editor div.code {\r\n\theight: 100%;\r\n\twidth: 100%;\r\n\tbackground-color: black;\r\n\tpadding: 4px;\r\n\tfont: 16px monospace;\r\n\toverflow: auto;\r\n\tresize: none;\r\n\toutline: none;\r\n}\r\n\r\n.litegraph-editor .codeflask {\r\n\tbackground-color: #2a2a2a;\r\n}\r\n\r\n.litegraph-editor .codeflask textarea {\r\n\topacity: 0;\r\n}\r\n";
+  styleInject(css_248z$1);
+
   function _typeof(obj) {
     "@babel/helpers - typeof";
 
@@ -236,6 +269,9 @@
 
   };
 
+  /**
+   * @module Time Utils
+   */
   function getTime() {
     if (performance) return performance.now();
     if (Date && Date.now) return Date.now;
@@ -248,6 +284,9 @@
     return new Date().getTime();
   }
 
+  /**
+   * @module Object Utils
+   */
   // separated just to improve if it doesn't work
   function cloneObject(obj, target) {
     if (obj == null) return null;
@@ -483,7 +522,10 @@
     return defaultConfig.auto_sort_node_types ? result.sort() : result;
   }
 
-  // used to create nodes from wrapping functions
+  /**
+   * @module Function Utils
+   */
+
   function getParameterNames(func) {
     return "".concat(func).replace(/[/][/].*$/gm, "") // strip single-line comments
     .replace(/\s+/g, "") // strip white space
@@ -568,6 +610,15 @@
     return false;
   }
 
+  /**
+   * @class LLink
+   * @param id
+   * @param type
+   * @param origin_id
+   * @param origin_slot
+   * @param target_id
+   * @param target_slot
+   */
   var LLink$1 = /*#__PURE__*/function () {
     function LLink(id, type, origin_id, origin_slot, target_id, target_slot) {
       _classCallCheck(this, LLink);
@@ -611,6 +662,9 @@
     return LLink;
   }();
 
+  /**
+   * @module Math Utils
+   */
   function distance(a, b) {
     return Math.sqrt((b[0] - a[0]) * (b[0] - a[0]) + (b[1] - a[1]) * (b[1] - a[1]));
   }
@@ -681,12 +735,13 @@
   + getExtraMenuOptions: to add option to context menu
   */
 
+  /**
+   * Base Class for all the node type classes
+   * @class LGraphNode
+   * @param {String} title a name for the node
+   */
+
   var LGraphNode = /*#__PURE__*/function () {
-    /**
-     * Base Class for all the node type classes
-     * @class LGraphNode
-     * @param {String} title a name for the node
-     */
     function LGraphNode(title) {
       _classCallCheck(this, LGraphNode);
 
@@ -714,6 +769,7 @@
      * @internal
      * @type {Float32Array}
      * @private
+     * @memberOf LGraphNode
      */
 
 
@@ -725,6 +781,7 @@
       /**
        * configure a node from an object containing the serialized info
        * @method configure
+       * @memberOf LGraphNode
        */
       ,
       set: function set(v) {
@@ -835,6 +892,7 @@
       /**
        * serialize the content
        * @method serialize
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -939,6 +997,7 @@
       /**
        * serialize and stringify
        * @method toString
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -951,6 +1010,7 @@
       /**
        * get the title string
        * @method getTitle
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -963,6 +1023,7 @@
        * @method setProperty
        * @param {String} name
        * @param {*} value
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -998,6 +1059,7 @@
        * @method setOutputData
        * @param {number} slot
        * @param {*} data
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -1036,6 +1098,7 @@
        * @method setOutputDataType
        * @param {number} slot
        * @param {String} datatype
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -1072,6 +1135,7 @@
        * @param {boolean} force_update if set to true it will force the connected node of this slot
        *     to output data into this link
        * @return {*} data or if it is not connected returns undefined
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -1119,6 +1183,7 @@
        * @method getInputDataType
        * @param {number} slot
        * @return {String} datatype in string format
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -1162,6 +1227,7 @@
        * @param {boolean} force_update if set to true it will force the connected node of this slot
        *     to output data into this link
        * @return {*} data or if it is not connected returns null
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -1180,6 +1246,7 @@
        * @method isInputConnected
        * @param {number} slot
        * @return {boolean}
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -1196,6 +1263,7 @@
        * @method getInputInfo
        * @param {number} slot
        * @return {Object} object or null { link: id, name: string, type: string or 0 }
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -1216,6 +1284,7 @@
        * @method getInputLink
        * @param {number} slot
        * @return {LLink} object or null
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -1237,6 +1306,7 @@
        * @method getInputNode
        * @param {number} slot
        * @return {LGraphNode} node or null
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -1270,6 +1340,7 @@
        * @method getInputOrProperty
        * @param {string} name
        * @return {*} value
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -1298,6 +1369,7 @@
        * @method getOutputData
        * @param {number} slot
        * @return {Object}  object or null
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -1320,6 +1392,7 @@
        * @param {number} slot
        * @return {Object}  object or null { name: string, type: string, links: [ ids of links in
        *     number ] }
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -1340,6 +1413,7 @@
        * @method isOutputConnected
        * @param {number} slot
        * @return {boolean}
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -1355,6 +1429,7 @@
        * tells you if there is any connection in the output slots
        * @method isAnyOutputConnected
        * @return {boolean}
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -1377,6 +1452,7 @@
        * @method getOutputNodes
        * @param {number} slot
        * @return {array}
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -1419,6 +1495,7 @@
        * @param {String} event name ( "on_play", ... ) if action is equivalent to false then the
        *     event is send to all
        * @param {*} param
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -1443,6 +1520,7 @@
        * @param {*} param
        * @param {Number} link_id [optional] in case you want to trigger and specific output link in a
        *     slot
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -1510,6 +1588,7 @@
        * @param {Number} slot the index of the output slot
        * @param {Number} link_id [optional] in case you want to trigger and specific output link in a
        *     slot
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -1554,6 +1633,7 @@
        * changes node size and triggers callback
        * @method setSize
        * @param {vec2} size
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -1570,6 +1650,7 @@
        * @param {string} type string defining the output type ("vec3","number",...)
        * @param {Object} extra_info this can be used to have special properties of the property (like
        *     values, etc)
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -1608,6 +1689,7 @@
        * @param {string} type string defining the output type ("vec3","number",...)
        * @param {Object} extra_info this can be used to have special properties of an output (label,
        *     special color, position, etc)
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -1643,6 +1725,7 @@
        * add a new output slot to use in this node
        * @method addOutputs
        * @param {Array} array of triplets like [[name,type,extra_info],[...]]
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -1680,6 +1763,7 @@
        * remove an existing output slot
        * @method removeOutput
        * @param {number} slot
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -1722,6 +1806,7 @@
        *     one use 0
        * @param {Object} extra_info this can be used to have special properties of an input (label,
        *     color, position, etc)
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -1758,6 +1843,7 @@
        * add several new input slots in this node
        * @method addInputs
        * @param {Array} array of triplets like [[name,type,extra_info],[...]]
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -1795,6 +1881,7 @@
        * remove an existing input slot
        * @method removeInput
        * @param {number} slot
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -1830,8 +1917,9 @@
        * @method addConnection
        * @param {string} name
        * @param {string} type string defining the input type ("vec3","number",...)
-       * @param {[x,y]} pos position of the connection inside the node
+       * @param {number[]} pos position of the connection inside the node
        * @param {string} direction if is input or output
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -1852,6 +1940,7 @@
        * @method computeSize
        * @param {number} minHeight
        * @return {number} the total size
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -1949,6 +2038,7 @@
        * @method getPropertyInfo
        * @param {String} property name of the property
        * @return {Object} the object with all the available info
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -1991,6 +2081,7 @@
        *     the name of the property to modify)
        * @param {Object} options the object that contains special properties of this widget
        * @return {Object} the created widget object
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -2062,7 +2153,8 @@
        * returns the bounding of the object, used for rendering purposes
        * bounding is: [topleft_cornerx, topleft_cornery, width, height]
        * @method getBounding
-       * @return {Float32Array[4]} the total size
+       * @return {Float32Array} the total size
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -2086,6 +2178,7 @@
        * @param {number} x
        * @param {number} y
        * @return {boolean}
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -2117,6 +2210,7 @@
        * @param {number} y
        * @return {Object} if found the object contains { input|output: slot object, slot: number,
        *     link_pos: [x,y] }
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -2162,6 +2256,7 @@
        * @method findInputSlot
        * @param {string} name the name of the slot
        * @return {number} the slot (-1 if not found)
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -2184,6 +2279,7 @@
        * @method findOutputSlot
        * @param {string} name the name of the slot
        * @return {number} the slot (-1 if not found)
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -2210,6 +2306,7 @@
        * @param {number_or_string} target_slot the input slot of the target node (could be the number
        *     of the slot or the string with the name of the slot, or -1 to connect a trigger)
        * @return {Object} the link_info is created, otherwise null
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -2358,6 +2455,7 @@
        * @param {LGraphNode} target_node the target node to which this slot is connected [Optional,
        *     if not target_node is specified all nodes will be disconnected]
        * @return {boolean} if it was disconnected successfully
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -2492,6 +2590,7 @@
        * @param {number_or_string} slot (could be the number of the slot or the string with the name
        *     of the slot)
        * @return {boolean} if it was disconnected successfully
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -2583,7 +2682,8 @@
        * @param {number_or_string} slot (could be the number of the slot or the string with the name
        *     of the slot)
        * @param {vec2} out [optional] a place to store the output, to free garbage
-       * @return {[x,y]} the position
+       * @return {number[]} the position
+       * @memberOf LGraphNode
        * */
 
     }, {
@@ -2781,6 +2881,7 @@
       /**
        * Collapse the node to make it smaller on the canvas
        * @method collapse
+       * @memberOf LGraphNode
        * */
 
     }, {
@@ -2798,6 +2899,7 @@
       /**
        * Forces the node to do not move or realign on Z
        * @method pin
+       * @memberOf LGraphNode
        * */
 
     }, {
@@ -2822,6 +2924,7 @@
        * @param {String} type full name of the node class. p.e. "math/sin"
        * @param {String} name a name to distinguish from other nodes
        * @param {Object} options to set options
+       * @memberOf LGraphNode
        */
 
     }], [{
@@ -2947,6 +3050,7 @@
        * (You can add it to LGraphNode.prototype but then existing node types wont have it)
        * @method addNodeMethod
        * @param {Function} func
+       * @memberOf LGraphNode
        */
 
     }, {
@@ -2984,6 +3088,11 @@
 
     return LGraphNode;
   }();
+
+  /**
+   * @class LGraphGroup
+   * @param title
+   */
 
   var LGraphGroup = /*#__PURE__*/function () {
     function LGraphGroup(title) {
@@ -3097,6 +3206,11 @@
     return LGraphGroup;
   }();
 
+  /**
+   * @class DragAndScale
+   * @param element
+   * @param skipEvents
+   */
   var DragAndScale = /*#__PURE__*/function () {
     function DragAndScale(element, skipEvents) {
       _classCallCheck(this, DragAndScale);
@@ -3303,6 +3417,9 @@
     return DragAndScale;
   }();
 
+  /**
+   * @module File Utils
+   */
   function getFileExtension(url) {
     var question = url.indexOf("?");
 
@@ -3319,20 +3436,19 @@
     return url.substr(point + 1).toLowerCase();
   }
 
+  /**
+   * ContextMenu from LiteGUI
+   * @class ContextMenu
+   * @constructor
+   * @param {Array} values (allows object { title: "Nice text", callback: function ... })
+   * @param {Object} options [optional] Some options:\
+   * - title: title to show on top of the menu
+   * - callback: function to call when an option is clicked, it receives the item information
+   * - ignore_item_callbacks: ignores the callback inside the item, it just calls the
+   *     options.callback
+   * - event: you can pass a MouseEvent, this way the ContextMenu appears in that position
+   */
   var ContextMenu = /*#__PURE__*/function () {
-    /**
-     * ContextMenu from LiteGUI
-     *
-     * @class ContextMenu
-     * @constructor
-     * @param {Array} values (allows object { title: "Nice text", callback: function ... })
-     * @param {Object} options [optional] Some options:\
-     * - title: title to show on top of the menu
-     * - callback: function to call when an option is clicked, it receives the item information
-     * - ignore_item_callbacks: ignores the callback inside the item, it just calls the
-     *     options.callback
-     * - event: you can pass a MouseEvent, this way the ContextMenu appears in that position
-     */
     function ContextMenu(values) {
       var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
@@ -3659,20 +3775,19 @@
   var linkBounding = new Float32Array(4);
   var tempA = new Float32Array(2);
   var tempB = new Float32Array(2);
+  /**
+   * This class is in charge of rendering one graph inside a canvas. And provides all the
+   * interaction required. Valid callbacks are: onNodeSelected, onNodeDeselected,
+   * onShowNodePanel, onNodeDblClicked
+   * @class LGraphCanvas
+   * @constructor
+   * @param {HTMLCanvasElement} canvas the canvas where you want to render
+   *  (it accepts a selector in string format or the canvas element itself)
+   * @param {LGraph} graph [optional]
+   * @param {Object} options [optional] { skip_rendering, autoresize }
+   */
 
   var LGraphCanvas = /*#__PURE__*/function () {
-    /**
-     * This class is in charge of rendering one graph inside a canvas. And provides all the
-     * interaction required. Valid callbacks are: onNodeSelected, onNodeDeselected,
-     * onShowNodePanel, onNodeDblClicked
-     *
-     * @class LGraphCanvas
-     * @constructor
-     * @param {HTMLCanvasElement} canvas the canvas where you want to render
-     *  (it accepts a selector in string format or the canvas element itself)
-     * @param {LGraph} graph [optional]
-     * @param {Object} options [optional] { skip_rendering, autoresize }
-     */
     function LGraphCanvas(_canvas, graph) {
       var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
@@ -4115,6 +4230,7 @@
        * clears all the data inside
        *
        * @method clear
+       * @memberOf LGraphCanvas
        */
       function clear() {
         this.frame = 0;
@@ -4149,6 +4265,7 @@
        * @method setGraph
        * @param {LGraph} graph
        * @param {boolean=} skipClear
+       * @memberOf LGraphCanvas
        */
 
     }, {
@@ -4175,6 +4292,7 @@
        *
        * @method getTopGraph
        * @return {LGraph} graph
+       * @memberOf LGraphCanvas
        */
 
     }, {
@@ -4188,6 +4306,7 @@
        *
        * @method openSubgraph
        * @param {LGraph} graph
+       * @memberOf LGraphCanvas
        */
 
     }, {
@@ -4219,6 +4338,7 @@
        * closes a subgraph contained inside a node
        *
        * @method closeSubgraph
+       * @memberOf LGraphCanvas
        */
 
     }, {
@@ -4246,6 +4366,7 @@
        * returns the visualy active graph (in case there are more in the stack)
        * @method getCurrentGraph
        * @return {LGraph} the active graph
+       * @memberOf LGraphCanvas
        */
 
     }, {
@@ -4260,6 +4381,7 @@
        * @param {HTMLCanvasElement | string | HTMLElement} canvas assigns a canvas
        *  (also accepts the ID of the element (not a selector))
        * @param {boolean} skipEvents
+       * @memberOf LGraphCanvas
        */
 
     }, {
@@ -4338,6 +4460,7 @@
       /**
        * binds mouse, keyboard, touch and drag events to the canvas
        * @method bindEvents
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -4382,6 +4505,7 @@
       /**
        * unbinds mouse events from the canvas
        * @method unbindEvents
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -4417,6 +4541,7 @@
        * this is useful if you plant to render 3D objects inside your nodes, it uses litegl.js for
        * webgl and canvas2DtoWebGL to emulate the Canvas2D calls in webGL
        * @method enableWebGL
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -4438,6 +4563,7 @@
        * @method setDirty
        * @param {boolean} [fgcanvas] if the foreground canvas is dirty (the one containing the nodes)
        * @param {boolean} [bgcanvas] if the background canvas is dirty (the one containing the wires)
+       * @memberOf LGraphCanvas
        */
 
     }, {
@@ -4451,6 +4577,7 @@
        *
        * @method getCanvasWindow
        * @return {Window} returns the window where the canvas is attached (the DOM root node)
+       * @memberOf LGraphCanvas
        */
 
     }, {
@@ -4464,6 +4591,7 @@
        * starts rendering the content of the canvas when needed
        *
        * @method startRendering
+       * @memberOf LGraphCanvas
        */
 
     }, {
@@ -4477,6 +4605,7 @@
        * render a frame
        *
        * @method renderFrame
+       * @memberOf LGraphCanvas
        */
 
     }, {
@@ -4494,6 +4623,7 @@
        * stops rendering the content of the canvas (to save resources)
        *
        * @method stopRendering
+       * @memberOf LGraphCanvas
        */
 
     }, {
@@ -4507,6 +4637,7 @@
        * used to block future mouse events (because of im gui)
        *
        * @method blockClick
+       * @memberOf LGraphCanvas
        */
 
     }, {
@@ -4784,6 +4915,7 @@
       /**
        * Called when a mouse move event has to be processed
        * @method processMouseMove
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -4980,6 +5112,7 @@
       /**
        * Called when a mouse up event has to be processed
        * @method processMouseUp
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -5162,6 +5295,7 @@
       /**
        * Called when a mouse wheel event has to be processed
        * @method processMouseWheel
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -5192,6 +5326,7 @@
       /**
        * returns true if a position (in graph space) is on top of a node little corner box
        * @method isOverNodeBox
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -5203,6 +5338,7 @@
       /**
        * returns true if a position (in graph space) is on top of a node input slot
        * @method isOverNodeInput
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -5235,6 +5371,7 @@
       /**
        * process a key event
        * @method processKey
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -5435,6 +5572,7 @@
       /**
        * process a item drop event on top the canvas
        * @method processDrop
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -5563,6 +5701,7 @@
        * @method selectNode
        * @param {LGraphNode} node
        * @param {boolean} addToCurrentSelection
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -5577,6 +5716,7 @@
       /**
        * selects several nodes (or adds them to the current selection)
        * @method selectNodes
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -5656,6 +5796,7 @@
       /**
        * removes a node from the current selection
        * @method deselectNode
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -5724,6 +5865,7 @@
       /**
        * removes all nodes from the current selection
        * @method deselectAllNodes
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -5767,6 +5909,7 @@
       /**
        * deletes all nodes in the current selection from the graph
        * @method deleteSelectedNodes
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -5804,6 +5947,7 @@
       /**
        * centers the camera on a given node
        * @method centerOnNode
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -5816,6 +5960,7 @@
       /**
        * adds some useful properties to a mouse event, like the position in graph coordinates
        * @method adjustMouseEvent
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -5841,6 +5986,7 @@
        * changes the zoom level of the graph (default is 1), you can pass also a place used to pivot
        * the zoom
        * @method setZoom
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -5853,6 +5999,7 @@
       /**
        * converts a coordinate from graph coordinates to canvas2D coordinates
        * @method convertOffsetToCanvas
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -5863,6 +6010,7 @@
       /**
        * converts a coordinate from Canvas2D coordinates to graph space
        * @method convertCanvasToOffset
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -5875,6 +6023,7 @@
        * @method convertEventToCanvasOffset
        * @param e
        * @returns {Array}
+       * @memberOf LGraphCanvas
        */
 
     }, {
@@ -5887,6 +6036,7 @@
        * brings a node to front (above all other nodes)
        * @method bringToFront
        * @param {LGraphNode} node
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -5906,6 +6056,7 @@
        * sends a node to the back (below all other nodes)
        * @method sendToBack
        * @param {LGraphNode} node
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -5927,6 +6078,7 @@
        * @param {LGraphNode[]} [nodes]
        * @param {LGraphNode[]} [out]
        * @return {LGraphNode[]}
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -5970,6 +6122,7 @@
        * @method draw
        * @param {boolean} [force_canvas]
        * @param {boolean} [force_bgcanvas]
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -5989,6 +6142,7 @@
       /**
        * draws the front canvas (the one containing all the nodes)
        * @method drawFrontCanvas
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -6125,6 +6279,7 @@
       /**
        * draws the panel in the corner that shows subgraph properties
        * @method drawSubgraphPanel
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -6227,6 +6382,7 @@
        * @param [hovercolor]
        * @param [textcolor]
        * @returns {*|boolean}
+       * @memberOf LGraphCanvas
        */
 
     }, {
@@ -6271,6 +6427,7 @@
       /**
        * draws some useful stats in the corner of the canvas
        * @method renderInfo
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -6298,6 +6455,7 @@
       /**
        * draws the back canvas (the one containing the background and the connections)
        * @method drawBackCanvas
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -6433,6 +6591,7 @@
       /**
        * draws the given node inside the canvas
        * @method drawNode
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -6781,6 +6940,7 @@
       /**
        * draws the shape of the given node in the canvas
        * @method drawNodeShape
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -6983,6 +7143,7 @@
        * draws every connection visible in the canvas
        * OPTIMIZE THIS: pre-catch connections position instead of recomputing them every time
        * @method drawConnections
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -7092,6 +7253,7 @@
        * @param {number} startDir the direction enum
        * @param {number} endDir the direction enum
        * @param {number} numSubline number of sublines (useful to represent vec3 or rgb)
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -7311,6 +7473,7 @@
        * @param [startDir]
        * @param [endDir]
        * @returns {number[]}
+       * @memberOf LGraphCanvas
        */
 
     }, {
@@ -7405,6 +7568,7 @@
       /**
        * draws the widgets stored inside a node
        * @method drawNodeWidgets
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -7600,6 +7764,7 @@
       /**
        * process an event on widgets
        * @method processNodeWidgets
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -7823,6 +7988,7 @@
       /**
        * draws every group area in the background
        * @method drawGroups
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -7897,6 +8063,7 @@
        * resizes the canvas to a given size, if no size is passed, then it tries to fill the
        * parentNode
        * @method resize
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -7922,6 +8089,7 @@
        * switches to live mode (node shapes are not rendered, only the content)
        * this feature was designed when graphs where meant to create user interfaces
        * @method switchLiveMode
+       * @memberOf LGraphCanvas
        * */
 
     }, {
@@ -7965,7 +8133,8 @@
       /**
        * @method onNodeSelectionChange
        * @param node
-       * @todo
+       * @todo Need create event
+       * @memberOf LGraphCanvas
        */
 
     }, {
@@ -7975,6 +8144,7 @@
       /**
        * @method touchHandler
        * @param {TouchEvent} event
+       * @memberOf LGraphCanvas
        */
 
     }, {
@@ -8019,6 +8189,7 @@
        * @param info
        * @param entry
        * @param {MouseEvent} mouseEvent
+       * @memberOf LGraphCanvas
        */
 
     }, {
@@ -8837,7 +9008,8 @@
       }
       /**
        * @method onMenuCollapseAll
-       * @todo
+       * @todo Need create event
+       * @memberOf LGraphCanvas
        */
 
     }, {
@@ -8845,7 +9017,8 @@
       value: function onMenuCollapseAll() {}
       /**
        * @method onMenuNodeEdit
-       * @todo
+       * @todo Need create event
+       * @memberOf LGraphCanvas
        */
 
     }, {
@@ -9442,10 +9615,11 @@
       /**
        * Removes all nodes from this graph
        * @method clear
+       * @memberOf LGraph
        */
       function clear() {
         this.stop();
-        this.status = LGraph.STATUS_STOPPED;
+        this.status = this.STATUS_STOPPED;
         this.last_node_id = 0;
         this.last_link_id = 0;
         this._version = -1; // used to detect changes
@@ -9506,6 +9680,7 @@
        * Attach Canvas to this graph
        * @method attachCanvas
        * @param {GraphCanvas} graphcanvas
+       * @memberOf LGraph
        */
 
     }, {
@@ -9527,6 +9702,7 @@
        * Detach Canvas from this graph
        * @method detachCanvas
        * @param {GraphCanvas} graphcanvas
+       * @memberOf LGraph
        */
 
     }, {
@@ -9550,6 +9726,7 @@
        * @method start
        * @param {number} interval amount of milliseconds between executions, if 0 then it renders to
        *     the monitor refresh rate
+       * @memberOf LGraph
        */
 
     }, {
@@ -9600,6 +9777,7 @@
       /**
        * Stops the execution loop of the graph
        * @method stop execution
+       * @memberOf LGraph
        */
 
     }, {
@@ -9631,6 +9809,7 @@
        * @param {number} num number of steps to run, default is 1
        * @param {Boolean} doNotCatchError [optional] if you want to try/catch errors
        * @param {number} limit max number of nodes to execute (used to execute from start to a node)
+       * @memberOf LGraph
        */
 
     }, {
@@ -9724,6 +9903,7 @@
        * Updates the graph execution order according to relevance of the nodes (nodes with only
        * outputs have more relevance than nodes with only inputs.
        * @method updateExecutionOrder
+       * @memberOf LGraph
        */
 
     }, {
@@ -9755,6 +9935,7 @@
        * @param setLevel
        * @returns {this}
        * @internal
+       * @memberOf LGraph
        */
 
     }, {
@@ -9929,6 +10110,7 @@
        * Returns all the nodes that could affect this one (ancestors) by crawling all the inputs
        * recursively. It doesn't include the node itself
        * @method getAncestors
+       * @memberOf LGraph
        * @return {Array} an array with all the LGraphNodes that affect this node, in order of
        *     execution
        */
@@ -9970,6 +10152,7 @@
       /**
        * Positions every node in a more readable manner
        * @method arrange
+       * @memberOf LGraph
        */
 
     }, {
@@ -10037,6 +10220,7 @@
        * Returns the amount of time the graph has been running in milliseconds
        * @method getTime
        * @return {number} number of milliseconds the graph has been running
+       * @memberOf LGraph
        */
 
     }, {
@@ -10049,6 +10233,7 @@
        * context where the time increments should be constant
        * @method getFixedTime
        * @return {number} number of milliseconds the graph has been running
+       * @memberOf LGraph
        */
 
     }, {
@@ -10061,6 +10246,7 @@
        * this number could be not correct if the nodes are using graphical actions
        * @method getElapsedTime
        * @return {number} number of milliseconds it took the last cycle
+       * @memberOf LGraph
        */
 
     }, {
@@ -10073,6 +10259,7 @@
        * @method sendEventToAllNodes
        * @param {String} eventname the name of the event (function to be called)
        * @param {Array} params parameters in array format
+       * @memberOf LGraph
        */
 
     }, {
@@ -10140,6 +10327,7 @@
        * @method add
        * @param {LGraphNode} node the instance of the node
        * @param {boolean} skipComputeOrder
+       * @memberOf LGraph
        */
 
     }, {
@@ -10195,6 +10383,7 @@
        * Removes a node from the graph
        * @method remove
        * @param {LGraphNode} node the instance of the node
+       * @memberOf LGraph
        */
 
     }, {
@@ -10305,6 +10494,7 @@
        * Returns a node by its id.
        * @method getNodeById
        * @param {Number} id
+       * @memberOf LGraph
        */
 
     }, {
@@ -10322,6 +10512,7 @@
        * @param {Class} classObject the class itself (not an string)
        * @param {Array} result
        * @return {Array} a list with all the nodes of this type
+       * @memberOf LGraph
        */
 
     }, {
@@ -10352,6 +10543,7 @@
        * @param {String} type the name of the node type
        * @param {Array} result
        * @return {Array} a list with all the nodes of this type
+       * @memberOf LGraph
        */
 
     }, {
@@ -10383,6 +10575,7 @@
        * @method findNodeByTitle
        * @param {String} title the name of the node to search
        * @return {Node} the node or null
+       * @memberOf LGraph
        */
 
     }, {
@@ -10409,6 +10602,7 @@
        * @method findNodesByTitle
        * @param {String} title the name of the node to search
        * @return {Array} a list with all the nodes with this name
+       * @memberOf LGraph
        */
 
     }, {
@@ -10441,6 +10635,7 @@
        *     nodes in the graph
        * @param {number} margin
        * @return {LGraphNode} the node at this position or null
+       * @memberOf LGraph
        */
 
     }, {
@@ -10471,6 +10666,7 @@
        * @param {number} x the x coordinate in canvas space
        * @param {number} y the y coordinate in canvas space
        * @return {LGraphGroup} the group or null
+       * @memberOf LGraph
        */
 
     }, {
@@ -10497,6 +10693,7 @@
        * by a newer version during execution this replaces the ones using the old version with the
        * new version
        * @method checkNodeTypes
+       * @memberOf LGraph
        */
 
     }, {
@@ -10536,8 +10733,7 @@
         }
 
         this.updateExecutionOrder();
-      } // ********** GLOBALS *****************
-
+      }
     }, {
       key: "onAction",
       value: function onAction(action, param) {
@@ -10576,6 +10772,7 @@
        * @param {String} name
        * @param {String} type
        * @param {*} value [optional]
+       * @memberOf LGraph
        */
 
     }, {
@@ -10610,6 +10807,7 @@
        * @method setGlobalInputData
        * @param {String} name
        * @param {*} data
+       * @memberOf LGraph
        */
 
     }, {
@@ -10628,6 +10826,7 @@
        * @method getInputData
        * @param {String} name
        * @return {*} the data
+       * @memberOf LGraph
        */
 
     }, {
@@ -10646,6 +10845,7 @@
        * @method renameInput
        * @param {String} oldName
        * @param {String} new_name
+       * @memberOf LGraph
        */
 
     }, {
@@ -10681,6 +10881,7 @@
        * @method changeInputType
        * @param {String} name
        * @param {String} type
+       * @memberOf LGraph
        */
 
     }, {
@@ -10705,6 +10906,7 @@
        * Removes a global graph input
        * @method removeInput
        * @param {String} name
+       * @memberOf LGraph
        */
 
     }, {
@@ -10733,6 +10935,7 @@
        * @param {String} name
        * @param {String} type
        * @param {*} value
+       * @memberOf LGraph
        */
 
     }, {
@@ -10758,6 +10961,7 @@
        * @method setOutputData
        * @param {String} name
        * @param {String} value
+       * @memberOf LGraph
        */
 
     }, {
@@ -10776,6 +10980,7 @@
        * @method getOutputData
        * @param {String} name
        * @return {*} the data
+       * @memberOf LGraph
        */
 
     }, {
@@ -10794,6 +10999,7 @@
        * @method renameOutput
        * @param {String} oldName
        * @param {String} newName
+       * @memberOf LGraph
        */
 
     }, {
@@ -10825,6 +11031,7 @@
        * @method changeOutputType
        * @param {String} name
        * @param {String} type
+       * @memberOf LGraph
        */
 
     }, {
@@ -10849,6 +11056,7 @@
        * Removes a global graph output
        * @method removeOutput
        * @param {String} name
+       * @memberOf LGraph
        */
 
     }, {
@@ -10924,6 +11132,7 @@
       /**
        * returns if the graph is in live mode
        * @method isLive
+       * @memberOf LGraph
        */
 
     }, {
@@ -10946,6 +11155,7 @@
       /**
        * clears the triggered slot animation in all links (stop visual animation)
        * @method clearTriggeredSlots
+       * @memberOf LGraph
        */
 
     }, {
@@ -10985,6 +11195,7 @@
        * Destroys a link
        * @method removeLink
        * @param {Number} linkId
+       * @memberOf LGraph
        */
 
     }, {
@@ -11007,6 +11218,7 @@
        * Creates a Object containing all the info about this graph, it can be serialized
        * @method serialize
        * @return {Object} value of the node
+       * @memberOf LGraph
        */
 
     }, {
@@ -11085,6 +11297,7 @@
        * @method configure
        * @param {String} str configure a graph from a JSON string
        * @param {Boolean} returns if there was any error parsing
+       * @memberOf LGraph
        */
 
     }, {
@@ -11256,10 +11469,11 @@
       }
       /**
        * Node event manager
-       * @todo
+       * @todo Need create event
        * @param node
        * @param msg
        * @param color
+       * @memberOf LGraph
        */
 
     }, {
@@ -11273,6 +11487,10 @@
 
   _defineProperty(LGraph, "supportedTypes", ["number", "string", "boolean"]);
 
+  /**
+   * @class CurveEditor
+   * @param points
+   */
   var CurveEditor = /*#__PURE__*/function () {
     function CurveEditor(points) {
       _classCallCheck(this, CurveEditor);
@@ -11461,6 +11679,12 @@
     return CurveEditor;
   }();
 
+  /**
+   * @class Editor
+   * @param containerId
+   * @param options
+   */
+
   var Editor = /*#__PURE__*/function () {
     function Editor(containerId, options) {
       _classCallCheck(this, Editor);
@@ -11565,14 +11789,14 @@
         miniwindow.style.position = "absolute";
         miniwindow.style.top = "4px";
         miniwindow.style.right = "4px";
-        var close_button = document.createElement("div");
-        close_button.className = "corner-button";
-        close_button.innerHTML = "&#10060;";
-        close_button.addEventListener("click", function (e) {
+        var closeBouton = document.createElement("div");
+        closeBouton.className = "corner-button";
+        closeBouton.innerHTML = "&#10060;";
+        closeBouton.addEventListener("click", function (e) {
           graphcanvas.setGraph(null);
           miniwindow.remove();
         });
-        miniwindow.appendChild(close_button);
+        miniwindow.appendChild(closeBouton);
         this.root.querySelector(".content").appendChild(miniwindow);
       }
     }]);

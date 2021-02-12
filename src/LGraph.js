@@ -50,7 +50,7 @@ export default class LGraph {
      */
     clear() {
         this.stop();
-        this.status = computeExecutionOrderLGraph.STATUS_STOPPED;
+        this.status = this.STATUS_STOPPED;
 
         this.last_node_id = 0;
         this.last_link_id = 0;

@@ -21,23 +21,6 @@ Try it in the [demo site](https://tamats.com/projects/litegraph/editor).
 - Easy to integrate in any JS application (one single file, no dependencies)
 - Typescript support
 
-## Nodes provided
-Although it is easy to create new node types, LiteGraph comes with some default nodes that could be useful for many cases:
-- Interface (Widgets)
-- Math (trigonometry, math operations)
-- Audio (AudioAPI and MIDI)
-- 3D Graphics (Postprocessing in WebGL)
-- Input (read Gamepad)
-
-## Installation
-
-You can install it using npm 
-```
-npm install litegraph.js
-```
-
-Or downloading the ```build/litegraph.js``` and ```css/litegraph.css``` version from this repository.
-
 ## First project ##
 
 ```html

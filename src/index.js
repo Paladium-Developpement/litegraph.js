@@ -1,3 +1,6 @@
+import "../css/litegraph.css";
+import "../css/litegraph-editor.css";
+
 export { default as LGraph } from "./LGraph";
 export { default as LLink } from "./LLink";
 export { default as LGraphNode } from "./LGraphNode";
