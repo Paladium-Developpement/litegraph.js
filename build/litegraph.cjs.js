@@ -10977,7 +10977,7 @@ class Editor {
     }
 }
 
-if (window && window.CanvasRenderingContext2D) {
+if (window && typeof window !== "undefined" && window.CanvasRenderingContext2D) {
     window.CanvasRenderingContext2D.prototype.roundRect = function roundRect(
         x,
         y,

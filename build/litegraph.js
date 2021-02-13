@@ -11804,7 +11804,7 @@
     return Editor;
   }();
 
-  if (window && window.CanvasRenderingContext2D) {
+  if (window && typeof window !== "undefined" && window.CanvasRenderingContext2D) {
     window.CanvasRenderingContext2D.prototype.roundRect = function roundRect(x, y, width, height) {
       var radius = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 5;
       var radiusLow = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : radius;
