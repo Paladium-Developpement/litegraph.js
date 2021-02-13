@@ -10973,7 +10973,7 @@ class Editor {
     }
 }
 
-if (CanvasRenderingContext2D) {
+if (typeof CanvasRenderingContext2D !== "undefined") {
     CanvasRenderingContext2D.prototype.roundRect = function roundRect(
         x,
         y,

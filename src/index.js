@@ -16,7 +16,7 @@ export * from "./utils/registry";
 export * from "./utils/math";
 export * from "./utils/function";
 
-if (CanvasRenderingContext2D) {
+if (typeof CanvasRenderingContext2D !== "undefined") {
     CanvasRenderingContext2D.prototype.roundRect = function roundRect(
         x,
         y,
