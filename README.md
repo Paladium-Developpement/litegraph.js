@@ -118,26 +118,14 @@ node_time.connect( 0, node_console, 1 );
 
 graph.start()
 ```
-
-
-## Projects using it
-
-### [webglstudio.org](http://webglstudio.org)
-
-![WebGLStudio](imgs/webglstudio.gif "WebGLStudio")
-
-### [MOI Elephant](http://moiscript.weebly.com/elephant-systegraveme-nodal.html)
-
-![MOI Elephant](imgs/elephant.gif "MOI Elephant")
-
-### Mynodes
-
-![MyNodes](imgs/mynodes.png "MyNodes")
-
 ## Utils
 -----
-
-It includes several commands in the utils folder to generate doc, check errors and build minifyed version.
+```shell
+npm run build     # Rollup
+npm run lint      # Eslint
+npm run lint:fix  # Eslint
+npm run doc       # JSDoc
+```
 
 
 ## Demo
@@ -147,24 +135,15 @@ The demo includes some examples of graphs. In order to try them you can visit [d
 $ git clone git@github.com:jagenjo/litegraph.js.git
 $ cd litegraph.js
 $ npm install
-$ node utils/server.js
 Example app listening on port 80!
 ```
 Open your browser and point it to http://localhost:8000/. You can select a demo from the dropdown at the top of the page.
 
-## Feedback
---------
-
-You can write any feedback to javi.agenjo@gmail.com
-
-## Contributors
-
-- kriffe
-- rappestad
-- InventivetalentDev
-- NateScarlet
-- coderofsalvation
-- ilyabesk
-
-
-
+## To fix
+- [] Right Click on nodes > Properties
+- [] Right Click on nodes > Mode (to remove ?)
+- [] Right Click on nodes > Pin (to remove ?)
+- [] Right Click on nodes > Resize
+- Uncaught ReferenceError: overlapBounding is not defined (move group)
+- Math.clamp is not a function
+- List of property nothing

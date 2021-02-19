@@ -3,6 +3,7 @@ import getTime from "./utils/time";
 import LGraphNode from "./LGraphNode";
 import LGraphGroup from "./LGraphGroup";
 import LGraphCanvas from "./LGraphCanvas";
+import LLink from "./LLink";
 
 /**
  * LGraph is the class that contain a full graph.

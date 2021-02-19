@@ -463,7 +463,7 @@ function isValidConnection(typeA, typeB) {
  * @param target_id
  * @param target_slot
  */
-class LLink$1 {
+class LLink {
     constructor(id, type, origin_id, origin_slot, target_id, target_slot) {
         this.id = id;
         this.type = type;
@@ -2133,7 +2133,7 @@ class LGraphNode {
         if (!changed) this.graph.beforeChange();
 
         // create link class
-        link_info = new LLink$1(
+        link_info = new LLink(
             ++this.graph.last_link_id,
             input.type,
             this.id,
@@ -11012,7 +11012,7 @@ exports.LGraph = LGraph;
 exports.LGraphCanvas = LGraphCanvas;
 exports.LGraphGroup = LGraphGroup;
 exports.LGraphNode = LGraphNode;
-exports.LLink = LLink$1;
+exports.LLink = LLink;
 exports.clamp = clamp;
 exports.clearRegisteredTypes = clearRegisteredTypes;
 exports.defaultConfig = defaultConfig;

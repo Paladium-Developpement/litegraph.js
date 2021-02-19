@@ -619,7 +619,7 @@
    * @param target_id
    * @param target_slot
    */
-  var LLink$1 = /*#__PURE__*/function () {
+  var LLink = /*#__PURE__*/function () {
     function LLink(id, type, origin_id, origin_slot, target_id, target_slot) {
       _classCallCheck(this, LLink);
 
@@ -2412,7 +2412,7 @@
 
         if (!changed) this.graph.beforeChange(); // create link class
 
-        link_info = new LLink$1(++this.graph.last_link_id, input.type, this.id, slot, target_node.id, target_slot); // add to graph links list
+        link_info = new LLink(++this.graph.last_link_id, input.type, this.id, slot, target_node.id, target_slot); // add to graph links list
 
         this.graph.links[link_info.id] = link_info; // connect in output
 
@@ -11828,7 +11828,7 @@
   exports.LGraphCanvas = LGraphCanvas;
   exports.LGraphGroup = LGraphGroup;
   exports.LGraphNode = LGraphNode;
-  exports.LLink = LLink$1;
+  exports.LLink = LLink;
   exports.clamp = clamp;
   exports.clearRegisteredTypes = clearRegisteredTypes;
   exports.defaultConfig = defaultConfig;

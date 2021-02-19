@@ -459,7 +459,7 @@ function isValidConnection(typeA, typeB) {
  * @param target_id
  * @param target_slot
  */
-class LLink$1 {
+class LLink {
     constructor(id, type, origin_id, origin_slot, target_id, target_slot) {
         this.id = id;
         this.type = type;
@@ -2129,7 +2129,7 @@ class LGraphNode {
         if (!changed) this.graph.beforeChange();
 
         // create link class
-        link_info = new LLink$1(
+        link_info = new LLink(
             ++this.graph.last_link_id,
             input.type,
             this.id,
@@ -11000,4 +11000,4 @@ if (typeof CanvasRenderingContext2D !== "undefined") {
     };
 }
 
-export { ContextMenu, CurveEditor, DragAndScale, Editor, LGraph, LGraphCanvas, LGraphGroup, LGraphNode, LLink$1 as LLink, clamp, clearRegisteredTypes, defaultConfig, distance, getNodeType, getNodeTypesCategories, getNodeTypesInCategory, getParameterNames, isInsideRectangle, isValidConnection, overlapBounding$1 as overlapBounding, registerNodeType, registerSearchboxExtra, unregisterNodeType, wrapFunctionAsNode };
+export { ContextMenu, CurveEditor, DragAndScale, Editor, LGraph, LGraphCanvas, LGraphGroup, LGraphNode, LLink, clamp, clearRegisteredTypes, defaultConfig, distance, getNodeType, getNodeTypesCategories, getNodeTypesInCategory, getParameterNames, isInsideRectangle, isValidConnection, overlapBounding$1 as overlapBounding, registerNodeType, registerSearchboxExtra, unregisterNodeType, wrapFunctionAsNode };
