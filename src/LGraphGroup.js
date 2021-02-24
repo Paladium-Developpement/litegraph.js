@@ -1,4 +1,5 @@
 import LGraphNode from "./LGraphNode";
+import { overlapBounding } from "./utils/math";
 
 /**
  * @class LGraphGroup

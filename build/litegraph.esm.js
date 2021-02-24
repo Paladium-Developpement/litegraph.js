@@ -517,7 +517,7 @@ function isInsideRectangle(x, y, left, top, width, height) {
 }
 
 // bounding overlap, format: [ startx, starty, width, height ]
-function overlapBounding$1(a, b) {
+function overlapBounding(a, b) {
     const AEndX = a[0] + a[2];
     const AEndY = a[1] + a[3];
     const BEndX = b[0] + b[2];
@@ -962,12 +962,12 @@ class LGraphNode {
      * Retrieves the input data (data traveling through the connection) from one slot
      * @method getInputData
      * @param {number} slot
-     * @param {boolean} force_update if set to true it will force the connected node of this slot
+     * @param {boolean} forceUpdate if set to true it will force the connected node of this slot
      *     to output data into this link
      * @return {*} data or if it is not connected returns undefined
      * @memberOf LGraphNode
      */
-    getInputData(slot, force_update) {
+    getInputData(slot, forceUpdate) {
         if (!this.inputs) {
             return;
         } // undefined;
@@ -976,14 +976,14 @@ class LGraphNode {
             return;
         }
 
-        const link_id = this.inputs[slot].link;
-        const link = this.graph.links[link_id];
+        const linkId = this.inputs[slot].link;
+        const link = this.graph.links[linkId];
         if (!link) {
             // bug: weird case but it happens sometimes
             return null;
         }
 
-        if (!force_update) {
+        if (link.data && !forceUpdate) {
             return link.data;
         }
 
@@ -3454,10 +3454,9 @@ class ContextMenu {
     }
 
     // this code is used to trigger events easily (used in the context menu mouseleave
-    static trigger(element, eventName, params, origin) {
+    static trigger(element, eventName, params) {
         const evt = document.createEvent("CustomEvent");
         evt.initCustomEvent(eventName, true, true, params); // canBubble, cancelable, detail
-        evt.target = origin;
         if (element.dispatchEvent) element.dispatchEvent(evt);
         else if (element.__events) element.__events.dispatchEvent(evt);
         // else nothing seems binded here so nothing to do
@@ -4616,7 +4615,7 @@ class LGraphCanvas {
                     for (const node of nodes) {
                         node.getBounding(nodeBounding);
                         if (
-                            !overlapBounding$1(
+                            !overlapBounding(
                                 this.dragging_rectangle,
                                 nodeBounding,
                             )
@@ -4974,8 +4973,10 @@ class LGraphCanvas {
         let index = 0;
         const selectedNodesArray = [];
 
-        for (const selectedNode of this.selected_nodes) {
-            node._relative_id = index;
+        // eslint-disable-next-line guard-for-in, no-restricted-syntax
+        for (const i in this.selected_nodes) {
+            const node = this.selected_nodes[i];
+            node.relative_id = index;
             selectedNodesArray.push(node);
             index += 1;
         }
@@ -5396,7 +5397,7 @@ class LGraphCanvas {
                 continue;
             }
 
-            if (!overlapBounding$1(this.visible_area, n.getBounding(temp))) {
+            if (!overlapBounding(this.visible_area, n.getBounding(temp))) {
                 continue;
             } // out of the visible area
 
@@ -6650,7 +6651,7 @@ class LGraphCanvas {
                 }
 
                 // skip links outside of the visible area of the canvas
-                if (!overlapBounding$1(linkBounding, marginArea)) {
+                if (!overlapBounding(linkBounding, marginArea)) {
                     continue;
                 }
 
@@ -7253,7 +7254,7 @@ class LGraphCanvas {
                     break;
                 case "slider":
                     w.options.max - w.options.min;
-                    const nvalue = Math.clamp((x - 15) / (widgetWidth - 30), 0, 1);
+                    const nvalue = clamp((x - 15) / (widgetWidth - 30), 0, 1);
                     w.value = w.options.min + (w.options.max - w.options.min) * nvalue;
                     if (w.callback) {
                         setTimeout(() => innerValueChange(w, w.value), 20);
@@ -7405,7 +7406,7 @@ class LGraphCanvas {
         ctx.globalAlpha = 0.5 * this.editor_alpha;
 
         for (const group of groups) {
-            if (!overlapBounding$1(this.visible_area, group._bounding)) {
+            if (!overlapBounding(this.visible_area, group._bounding)) {
                 continue;
             } // out of the visible area
 
@@ -10812,11 +10813,11 @@ class CurveEditor {
                 return;
             }
             if (!isEdgePoint) {
-                point[0] = Math.clamp(x, 0, 1);
+                point[0] = clamp(x, 0, 1);
             } else {
                 point[0] = s === 0 ? 0 : 1;
             }
-            point[1] = 1.0 - Math.clamp(y, 0, 1);
+            point[1] = 1.0 - clamp(y, 0, 1);
             points.sort((a, b) => a[0] - b[0]);
             this.selected = points.indexOf(point);
             this.must_update = true;
@@ -11000,4 +11001,4 @@ if (typeof CanvasRenderingContext2D !== "undefined") {
     };
 }
 
-export { ContextMenu, CurveEditor, DragAndScale, Editor, LGraph, LGraphCanvas, LGraphGroup, LGraphNode, LLink, clamp, clearRegisteredTypes, defaultConfig, distance, getNodeType, getNodeTypesCategories, getNodeTypesInCategory, getParameterNames, isInsideRectangle, isValidConnection, overlapBounding$1 as overlapBounding, registerNodeType, registerSearchboxExtra, unregisterNodeType, wrapFunctionAsNode };
+export { ContextMenu, CurveEditor, DragAndScale, Editor, LGraph, LGraphCanvas, LGraphGroup, LGraphNode, LLink, clamp, clearRegisteredTypes, defaultConfig, distance, getNodeType, getNodeTypesCategories, getNodeTypesInCategory, getParameterNames, isInsideRectangle, isValidConnection, overlapBounding, registerNodeType, registerSearchboxExtra, unregisterNodeType, wrapFunctionAsNode };

@@ -1,3 +1,4 @@
+import { clamp } from "./utils/math";
 /**
  * @class CurveEditor
  * @param points
@@ -114,11 +115,11 @@ export default class CurveEditor {
                 return;
             }
             if (!isEdgePoint) {
-                point[0] = Math.clamp(x, 0, 1);
+                point[0] = clamp(x, 0, 1);
             } else {
                 point[0] = s === 0 ? 0 : 1;
             }
-            point[1] = 1.0 - Math.clamp(y, 0, 1);
+            point[1] = 1.0 - clamp(y, 0, 1);
             points.sort((a, b) => a[0] - b[0]);
             this.selected = points.indexOf(point);
             this.must_update = true;

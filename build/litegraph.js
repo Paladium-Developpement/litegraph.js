@@ -672,7 +672,7 @@
     return left < x && left + width > x && top < y && top + height > y;
   } // bounding overlap, format: [ startx, starty, width, height ]
 
-  function overlapBounding$1(a, b) {
+  function overlapBounding(a, b) {
     var AEndX = a[0] + a[2];
     var AEndY = a[1] + a[3];
     var BEndX = b[0] + b[2];
@@ -1132,7 +1132,7 @@
        * Retrieves the input data (data traveling through the connection) from one slot
        * @method getInputData
        * @param {number} slot
-       * @param {boolean} force_update if set to true it will force the connected node of this slot
+       * @param {boolean} forceUpdate if set to true it will force the connected node of this slot
        *     to output data into this link
        * @return {*} data or if it is not connected returns undefined
        * @memberOf LGraphNode
@@ -1140,7 +1140,7 @@
 
     }, {
       key: "getInputData",
-      value: function getInputData(slot, force_update) {
+      value: function getInputData(slot, forceUpdate) {
         if (!this.inputs) {
           return;
         } // undefined;
@@ -1150,15 +1150,15 @@
           return;
         }
 
-        var link_id = this.inputs[slot].link;
-        var link = this.graph.links[link_id];
+        var linkId = this.inputs[slot].link;
+        var link = this.graph.links[linkId];
 
         if (!link) {
           // bug: weird case but it happens sometimes
           return null;
         }
 
-        if (!force_update) {
+        if (link.data && !forceUpdate) {
           return link.data;
         } // special case: used to extract data from the incoming connection before the graph has
         // been executed
@@ -3714,11 +3714,10 @@
       }
     }], [{
       key: "trigger",
-      value: function trigger(element, eventName, params, origin) {
+      value: function trigger(element, eventName, params) {
         var evt = document.createEvent("CustomEvent");
         evt.initCustomEvent(eventName, true, true, params); // canBubble, cancelable, detail
 
-        evt.target = origin;
         if (element.dispatchEvent) element.dispatchEvent(evt);else if (element.__events) element.__events.dispatchEvent(evt); // else nothing seems binded here so nothing to do
 
         return evt;
@@ -3906,40 +3905,39 @@
               }
 
               graphcanvas.graph.beforeChange();
+              var node = LGraphNode.createNode(name);
 
-              var _node2 = LGraphNode.createNode(name);
-
-              if (_node2) {
-                _node2.pos = graphcanvas.convertEventToCanvasOffset(event);
-                graphcanvas.graph.add(_node2);
+              if (node) {
+                node.pos = graphcanvas.convertEventToCanvasOffset(event);
+                graphcanvas.graph.add(node);
               }
 
               if (extra && extra.data) {
                 if (extra.data.properties) {
                   // eslint-disable-next-line
                   for (var _i in extra.data.properties) {
-                    _node2.addProperty(_i, extra.data.properties[_i]);
+                    node.addProperty(_i, extra.data.properties[_i]);
                   }
                 }
 
                 if (extra.data.inputs) {
-                  _node2.inputs = []; // eslint-disable-next-line
+                  node.inputs = []; // eslint-disable-next-line
 
                   for (var _i2 in extra.data.inputs) {
-                    _node2.addOutput(extra.data.inputs[_i2][0], extra.data.inputs[_i2][1]);
+                    node.addOutput(extra.data.inputs[_i2][0], extra.data.inputs[_i2][1]);
                   }
                 }
 
                 if (extra.data.outputs) {
-                  _node2.outputs = []; // eslint-disable-next-line
+                  node.outputs = []; // eslint-disable-next-line
 
                   for (var _i3 in extra.data.outputs) {
-                    _node2.addOutput(extra.data.outputs[_i3][0], extra.data.outputs[_i3][1]);
+                    node.addOutput(extra.data.outputs[_i3][0], extra.data.outputs[_i3][1]);
                   }
                 }
 
-                if (extra.data.title) _node2.title = extra.data.title;
-                if (extra.data.json) _node2.configure(extra.data.json);
+                if (extra.data.title) node.title = extra.data.title;
+                if (extra.data.json) node.configure(extra.data.json);
                 graphcanvas.graph.afterChange();
               }
             }
@@ -4970,8 +4968,7 @@
         } else if (this.allow_interaction && !this.read_only) {
           if (this.connecting_node) this.dirty_canvas = true; // get node over
 
-          var _node3 = this.graph.getNodeOnPos(e.canvasX, e.canvasY, this.visible_nodes); // remove mouseover flag
-
+          var node = this.graph.getNodeOnPos(e.canvasX, e.canvasY, this.visible_nodes); // remove mouseover flag
 
           var _iterator4 = _createForOfIteratorHelper(this.graph._nodes),
               _step4;
@@ -4980,7 +4977,7 @@
             for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
               var _node = _step4.value;
 
-              if (_node.mouseOver && _node3 !== _node) {
+              if (_node.mouseOver && node !== _node) {
                 // mouse leave
                 _node.mouseOver = false;
 
@@ -4999,32 +4996,32 @@
             _iterator4.f();
           }
 
-          if (_node3) {
-            if (_node3.redraw_on_mouse) this.dirty_canvas = true; // this.canvas.style.cursor = "move";
+          if (node) {
+            if (node.redraw_on_mouse) this.dirty_canvas = true; // this.canvas.style.cursor = "move";
 
-            if (!_node3.mouseOver) {
+            if (!node.mouseOver) {
               // mouse enter
-              _node3.mouseOver = true;
-              this.node_over = _node3;
+              node.mouseOver = true;
+              this.node_over = node;
               this.dirty_canvas = true;
-              if (_node3.onMouseEnter) _node3.onMouseEnter(e);
+              if (node.onMouseEnter) node.onMouseEnter(e);
             } // in case the node wants to do something
 
 
-            if (_node3.onMouseMove) {
-              _node3.onMouseMove(e, [e.canvasX - _node3.pos[0], e.canvasY - _node3.pos[1]], this);
+            if (node.onMouseMove) {
+              node.onMouseMove(e, [e.canvasX - node.pos[0], e.canvasY - node.pos[1]], this);
             } // if dragging a link
 
 
             if (this.connecting_node) {
               var pos = this._highlight_input || [0, 0]; // on top of input
 
-              if (this.isOverNodeBox(_node3, e.canvasX, e.canvasY)) ; else {
+              if (this.isOverNodeBox(node, e.canvasX, e.canvasY)) ; else {
                 // check if I have a slot below de mouse
-                var _slot2 = this.isOverNodeInput(_node3, e.canvasX, e.canvasY, pos);
+                var _slot2 = this.isOverNodeInput(node, e.canvasX, e.canvasY, pos);
 
-                if (_slot2 !== -1 && _node3.inputs[_slot2]) {
-                  var slotType = _node3.inputs[_slot2].type;
+                if (_slot2 !== -1 && node.inputs[_slot2]) {
+                  var slotType = node.inputs[_slot2].type;
 
                   if (isValidConnection(this.connecting_output.type, slotType)) {
                     this._highlight_input = pos;
@@ -5035,7 +5032,7 @@
 
 
             if (this.canvas) {
-              if (isInsideRectangle(e.canvasX, e.canvasY, _node3.pos[0] + _node3.size[0] - 5, _node3.pos[1] + _node3.size[1] - 5, 5, 5)) {
+              if (isInsideRectangle(e.canvasX, e.canvasY, node.pos[0] + node.size[0] - 5, node.pos[1] + node.size[1] - 5, 5, 5)) {
                 this.canvas.style.cursor = "se-resize";
               } else this.canvas.style.cursor = "crosshair";
             }
@@ -5076,7 +5073,7 @@
           // the area of the node)
 
 
-          if (this.node_capturing_input && this.node_capturing_input !== _node3 && this.node_capturing_input.onMouseMove) {
+          if (this.node_capturing_input && this.node_capturing_input !== node && this.node_capturing_input.onMouseMove) {
             this.node_capturing_input.onMouseMove(e, [e.canvasX - this.node_capturing_input.pos[0], e.canvasY - this.node_capturing_input.pos[1]], this);
           } // node being dragged
 
@@ -5173,16 +5170,15 @@
 
               try {
                 for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
-                  var _node4 = _step6.value;
+                  var node = _step6.value;
+                  node.getBounding(nodeBounding);
 
-                  _node4.getBounding(nodeBounding);
-
-                  if (!overlapBounding$1(this.dragging_rectangle, nodeBounding)) {
+                  if (!overlapBounding(this.dragging_rectangle, nodeBounding)) {
                     continue;
                   } // out of the visible area
 
 
-                  toSelect.push(_node4);
+                  toSelect.push(node);
                 }
               } catch (err) {
                 _iterator6.e(err);
@@ -5201,27 +5197,27 @@
             this.dirty_canvas = true;
             this.dirty_bgcanvas = true;
 
-            var _node5 = this.graph.getNodeOnPos(e.canvasX, e.canvasY, this.visible_nodes); // node below mouse
+            var _node2 = this.graph.getNodeOnPos(e.canvasX, e.canvasY, this.visible_nodes); // node below mouse
 
 
-            if (_node5) {
-              if (this.connecting_output.type === defaultConfig.EVENT && this.isOverNodeBox(_node5, e.canvasX, e.canvasY)) {
-                this.connecting_node.connect(this.connecting_slot, _node5, defaultConfig.EVENT);
+            if (_node2) {
+              if (this.connecting_output.type === defaultConfig.EVENT && this.isOverNodeBox(_node2, e.canvasX, e.canvasY)) {
+                this.connecting_node.connect(this.connecting_slot, _node2, defaultConfig.EVENT);
               } else {
                 // slot below mouse? connect
-                var _slot3 = this.isOverNodeInput(_node5, e.canvasX, e.canvasY);
+                var _slot3 = this.isOverNodeInput(_node2, e.canvasX, e.canvasY);
 
                 if (_slot3 !== -1) {
-                  this.connecting_node.connect(this.connecting_slot, _node5, _slot3);
+                  this.connecting_node.connect(this.connecting_slot, _node2, _slot3);
                 } else {
                   // not on top of an input
-                  var _input2 = _node5.getInputInfo(0); // auto connect
+                  var _input2 = _node2.getInputInfo(0); // auto connect
 
 
                   if (this.connecting_output.type === defaultConfig.EVENT) {
-                    this.connecting_node.connect(this.connecting_slot, _node5, defaultConfig.EVENT);
+                    this.connecting_node.connect(this.connecting_slot, _node2, defaultConfig.EVENT);
                   } else if (_input2 && !_input2.link && isValidConnection(_input2.type && this.connecting_output.type)) {
-                    this.connecting_node.connect(this.connecting_slot, _node5, 0);
+                    this.connecting_node.connect(this.connecting_slot, _node2, 0);
                   }
                 }
               }
@@ -5238,10 +5234,10 @@
             this.resizing_node = null;
           } else if (this.node_dragged) {
             // node being dragged?
-            var _node6 = this.node_dragged;
+            var _node3 = this.node_dragged;
 
-            if (_node6 && e.click_time < 300 && isInsideRectangle(e.canvasX, e.canvasY, _node6.pos[0], _node6.pos[1] - defaultConfig.NODE_TITLE_HEIGHT, defaultConfig.NODE_TITLE_HEIGHT, defaultConfig.NODE_TITLE_HEIGHT)) {
-              _node6.collapse();
+            if (_node3 && e.click_time < 300 && isInsideRectangle(e.canvasX, e.canvasY, _node3.pos[0], _node3.pos[1] - defaultConfig.NODE_TITLE_HEIGHT, defaultConfig.NODE_TITLE_HEIGHT, defaultConfig.NODE_TITLE_HEIGHT)) {
+              _node3.collapse();
             }
 
             this.dirty_canvas = true;
@@ -5258,9 +5254,9 @@
             this.node_dragged = null;
           } else {
             // get node over
-            var _node7 = this.graph.getNodeOnPos(e.canvasX, e.canvasY, this.visible_nodes);
+            var _node4 = this.graph.getNodeOnPos(e.canvasX, e.canvasY, this.visible_nodes);
 
-            if (!_node7 && e.click_time < 300) {
+            if (!_node4 && e.click_time < 300) {
               this.deselectAllNodes();
             }
 
@@ -5464,16 +5460,14 @@
         try {
           for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {
             var node_data = _step7.value;
+            var node = LGraphNode.createNode(node_data.type);
 
-            var _node8 = LGraphNode.createNode(node_data.type);
-
-            if (_node8) {
-              _node8.configure(node_data);
-
-              _node8.pos[0] += 5;
-              _node8.pos[1] += 5;
-              this.graph.add(_node8);
-              nodes.push(_node8);
+            if (node) {
+              node.configure(node_data);
+              node.pos[0] += 5;
+              node.pos[1] += 5;
+              this.graph.add(node);
+              nodes.push(node);
             }
           }
         } catch (err) {
@@ -5509,39 +5503,30 @@
           links: []
         };
         var index = 0;
-        var selectedNodesArray = [];
+        var selectedNodesArray = []; // eslint-disable-next-line guard-for-in, no-restricted-syntax
 
-        var _iterator9 = _createForOfIteratorHelper(this.selected_nodes),
-            _step9;
-
-        try {
-          for (_iterator9.s(); !(_step9 = _iterator9.n()).done;) {
-            var selectedNode = _step9.value;
-            node._relative_id = index;
-            selectedNodesArray.push(node);
-            index += 1;
-          }
-        } catch (err) {
-          _iterator9.e(err);
-        } finally {
-          _iterator9.f();
+        for (var _i10 in this.selected_nodes) {
+          var node = this.selected_nodes[_i10];
+          node.relative_id = index;
+          selectedNodesArray.push(node);
+          index += 1;
         }
 
-        for (var _i10 = 0, _selectedNodesArray = selectedNodesArray; _i10 < _selectedNodesArray.length; _i10++) {
-          var _node9 = _selectedNodesArray[_i10];
+        for (var _i11 = 0, _selectedNodesArray = selectedNodesArray; _i11 < _selectedNodesArray.length; _i11++) {
+          var _node5 = _selectedNodesArray[_i11];
 
-          var cloned = _node9.clone();
+          var cloned = _node5.clone();
 
           if (!cloned) {
-            console.warn("node type not found: ".concat(_node9.type));
+            console.warn("node type not found: ".concat(_node5.type));
             continue;
           }
 
           clipboardInfo.nodes.push(cloned.serialize());
 
-          if (_node9.inputs && _node9.inputs.length) {
-            for (var j = 0; j < _node9.inputs.length; ++j) {
-              var _input3 = _node9.inputs[j];
+          if (_node5.inputs && _node5.inputs.length) {
+            for (var j = 0; j < _node5.inputs.length; ++j) {
+              var _input3 = _node5.inputs[j];
 
               if (!_input3 || _input3.link == null) {
                 continue;
@@ -5562,7 +5547,7 @@
 
 
               clipboardInfo.links.push([target_node._relative_id, link_info.origin_slot, // j,
-              _node9._relative_id, link_info.target_slot]);
+              _node5._relative_id, link_info.target_slot]);
             }
           }
         }
@@ -5598,12 +5583,12 @@
           var files = e.dataTransfer.files;
 
           if (files && files.length) {
-            var _iterator10 = _createForOfIteratorHelper(files),
-                _step10;
+            var _iterator9 = _createForOfIteratorHelper(files),
+                _step9;
 
             try {
               var _loop = function _loop() {
-                var file = _step10.value;
+                var file = _step9.value;
                 var filename = file.name; // console.log(file);
 
                 if (node.onDropFile) {
@@ -5633,13 +5618,13 @@
                 }
               };
 
-              for (_iterator10.s(); !(_step10 = _iterator10.n()).done;) {
+              for (_iterator9.s(); !(_step9 = _iterator9.n()).done;) {
                 _loop();
               }
             } catch (err) {
-              _iterator10.e(err);
+              _iterator9.e(err);
             } finally {
-              _iterator10.f();
+              _iterator9.f();
             }
           }
         }
@@ -5666,14 +5651,12 @@
 
           if (nodetype) {
             this.graph.beforeChange();
+            var node = LGraphNode.createNode(nodetype.type);
+            node.pos = [e.canvasX, e.canvasY];
+            this.graph.add(node);
 
-            var _node10 = LGraphNode.createNode(nodetype.type);
-
-            _node10.pos = [e.canvasX, e.canvasY];
-            this.graph.add(_node10);
-
-            if (_node10.onDropFile) {
-              _node10.onDropFile(file);
+            if (node.onDropFile) {
+              node.onDropFile(file);
             }
 
             this.graph.afterChange();
@@ -5726,25 +5709,56 @@
         var addToCurrentSelection = arguments.length > 1 ? arguments[1] : undefined;
         if (!addToCurrentSelection) this.deselectAllNodes();
 
-        var _iterator11 = _createForOfIteratorHelper(nodes),
-            _step11;
+        var _iterator10 = _createForOfIteratorHelper(nodes),
+            _step10;
 
         try {
-          for (_iterator11.s(); !(_step11 = _iterator11.n()).done;) {
-            var _node11 = _step11.value;
-            if (_node11.is_selected) continue;
-            if (!_node11.is_selected && _node11.onSelected) _node11.onSelected();
-            _node11.is_selected = true;
-            this.selected_nodes[_node11.id] = _node11;
+          for (_iterator10.s(); !(_step10 = _iterator10.n()).done;) {
+            var node = _step10.value;
+            if (node.is_selected) continue;
+            if (!node.is_selected && node.onSelected) node.onSelected();
+            node.is_selected = true;
+            this.selected_nodes[node.id] = node;
 
-            if (_node11.inputs) {
-              var _iterator12 = _createForOfIteratorHelper(_node11.inputs),
+            if (node.inputs) {
+              var _iterator11 = _createForOfIteratorHelper(node.inputs),
+                  _step11;
+
+              try {
+                for (_iterator11.s(); !(_step11 = _iterator11.n()).done;) {
+                  var _input4 = _step11.value;
+                  this.highlighted_links[_input4.link] = true;
+                }
+              } catch (err) {
+                _iterator11.e(err);
+              } finally {
+                _iterator11.f();
+              }
+            }
+
+            if (node.outputs) {
+              var _iterator12 = _createForOfIteratorHelper(node.outputs),
                   _step12;
 
               try {
                 for (_iterator12.s(); !(_step12 = _iterator12.n()).done;) {
-                  var _input4 = _step12.value;
-                  this.highlighted_links[_input4.link] = true;
+                  var out = _step12.value;
+
+                  if (out.links) {
+                    var _iterator13 = _createForOfIteratorHelper(out.links),
+                        _step13;
+
+                    try {
+                      for (_iterator13.s(); !(_step13 = _iterator13.n()).done;) {
+                        var link = _step13.value;
+                        this.highlighted_links[link] = true;
+                      }
+                    } catch (err) {
+                      _iterator13.e(err);
+                    } finally {
+                      _iterator13.f();
+                    }
+                  }
                 }
               } catch (err) {
                 _iterator12.e(err);
@@ -5752,42 +5766,11 @@
                 _iterator12.f();
               }
             }
-
-            if (_node11.outputs) {
-              var _iterator13 = _createForOfIteratorHelper(_node11.outputs),
-                  _step13;
-
-              try {
-                for (_iterator13.s(); !(_step13 = _iterator13.n()).done;) {
-                  var out = _step13.value;
-
-                  if (out.links) {
-                    var _iterator14 = _createForOfIteratorHelper(out.links),
-                        _step14;
-
-                    try {
-                      for (_iterator14.s(); !(_step14 = _iterator14.n()).done;) {
-                        var link = _step14.value;
-                        this.highlighted_links[link] = true;
-                      }
-                    } catch (err) {
-                      _iterator14.e(err);
-                    } finally {
-                      _iterator14.f();
-                    }
-                  }
-                }
-              } catch (err) {
-                _iterator13.e(err);
-              } finally {
-                _iterator13.f();
-              }
-            }
           }
         } catch (err) {
-          _iterator11.e(err);
+          _iterator10.e(err);
         } finally {
-          _iterator11.f();
+          _iterator10.f();
         }
 
         if (this.onSelectionChange) this.onSelectionChange(this.selected_nodes);
@@ -5816,49 +5799,49 @@
 
 
         if (node.inputs) {
-          var _iterator15 = _createForOfIteratorHelper(node.inputs),
+          var _iterator14 = _createForOfIteratorHelper(node.inputs),
+              _step14;
+
+          try {
+            for (_iterator14.s(); !(_step14 = _iterator14.n()).done;) {
+              var _input5 = _step14.value;
+              delete this.highlighted_links[_input5.link];
+            }
+          } catch (err) {
+            _iterator14.e(err);
+          } finally {
+            _iterator14.f();
+          }
+        }
+
+        if (node.outputs) {
+          var _iterator15 = _createForOfIteratorHelper(node.outputs),
               _step15;
 
           try {
             for (_iterator15.s(); !(_step15 = _iterator15.n()).done;) {
-              var _input5 = _step15.value;
-              delete this.highlighted_links[_input5.link];
+              var out = _step15.value;
+
+              if (out.links) {
+                var _iterator16 = _createForOfIteratorHelper(out.links),
+                    _step16;
+
+                try {
+                  for (_iterator16.s(); !(_step16 = _iterator16.n()).done;) {
+                    var link = _step16.value;
+                    delete this.highlighted_links[link];
+                  }
+                } catch (err) {
+                  _iterator16.e(err);
+                } finally {
+                  _iterator16.f();
+                }
+              }
             }
           } catch (err) {
             _iterator15.e(err);
           } finally {
             _iterator15.f();
-          }
-        }
-
-        if (node.outputs) {
-          var _iterator16 = _createForOfIteratorHelper(node.outputs),
-              _step16;
-
-          try {
-            for (_iterator16.s(); !(_step16 = _iterator16.n()).done;) {
-              var out = _step16.value;
-
-              if (out.links) {
-                var _iterator17 = _createForOfIteratorHelper(out.links),
-                    _step17;
-
-                try {
-                  for (_iterator17.s(); !(_step17 = _iterator17.n()).done;) {
-                    var link = _step17.value;
-                    delete this.highlighted_links[link];
-                  }
-                } catch (err) {
-                  _iterator17.e(err);
-                } finally {
-                  _iterator17.f();
-                }
-              }
-            }
-          } catch (err) {
-            _iterator16.e(err);
-          } finally {
-            _iterator16.f();
           }
         }
       }
@@ -5873,31 +5856,31 @@
       value: function deselectAllNodes() {
         if (!this.graph) return;
 
-        var _iterator18 = _createForOfIteratorHelper(this.graph._nodes),
-            _step18;
+        var _iterator17 = _createForOfIteratorHelper(this.graph._nodes),
+            _step17;
 
         try {
-          for (_iterator18.s(); !(_step18 = _iterator18.n()).done;) {
-            var _node12 = _step18.value;
+          for (_iterator17.s(); !(_step17 = _iterator17.n()).done;) {
+            var node = _step17.value;
 
-            if (!_node12.is_selected) {
+            if (!node.is_selected) {
               continue;
             }
 
-            if (_node12.onDeselected) {
-              _node12.onDeselected();
+            if (node.onDeselected) {
+              node.onDeselected();
             }
 
-            _node12.is_selected = false;
+            node.is_selected = false;
 
             if (this.onNodeDeselected) {
-              this.onNodeDeselected(_node12);
+              this.onNodeDeselected(node);
             }
           }
         } catch (err) {
-          _iterator18.e(err);
+          _iterator17.e(err);
         } finally {
-          _iterator18.f();
+          _iterator17.f();
         }
 
         this.selected_nodes = {};
@@ -5917,25 +5900,23 @@
       value: function deleteSelectedNodes() {
         this.graph.beforeChange(); // eslint-disable-next-line guard-for-in, no-restricted-syntax
 
-        for (var _i11 in this.selected_nodes) {
-          var _node13 = this.selected_nodes[_i11];
-          if (_node13.block_delete) continue; // autoconnect when possible (very basic, only takes into account first input-output)
+        for (var _i12 in this.selected_nodes) {
+          var node = this.selected_nodes[_i12];
+          if (node.block_delete) continue; // autoconnect when possible (very basic, only takes into account first input-output)
 
-          if (_node13.inputs && _node13.inputs.length && _node13.outputs && _node13.outputs.length && isValidConnection(_node13.inputs[0].type, _node13.outputs[0].type) && _node13.inputs[0].link && _node13.outputs[0].links && _node13.outputs[0].links.length) {
-            var inputLink = _node13.graph.links[_node13.inputs[0].link];
-            var outputLink = _node13.graph.links[_node13.outputs[0].links[0]];
-
-            var inputNode = _node13.getInputNode(0);
-
-            var outputNode = _node13.getOutputNodes(0)[0];
+          if (node.inputs && node.inputs.length && node.outputs && node.outputs.length && isValidConnection(node.inputs[0].type, node.outputs[0].type) && node.inputs[0].link && node.outputs[0].links && node.outputs[0].links.length) {
+            var inputLink = node.graph.links[node.inputs[0].link];
+            var outputLink = node.graph.links[node.outputs[0].links[0]];
+            var inputNode = node.getInputNode(0);
+            var outputNode = node.getOutputNodes(0)[0];
 
             if (inputNode && outputNode) {
               inputNode.connect(inputLink.origin_slot, outputNode, outputLink.target_slot);
             }
           }
 
-          this.graph.remove(_node13);
-          if (this.onNodeDeselected) this.onNodeDeselected(_node13);
+          this.graph.remove(node);
+          if (this.onNodeDeselected) this.onNodeDeselected(node);
         }
 
         this.selected_nodes = {};
@@ -6089,19 +6070,19 @@
         nodes = this.graph._nodes;
         visibleNodes.length = 0;
 
-        var _iterator19 = _createForOfIteratorHelper(nodes),
-            _step19;
+        var _iterator18 = _createForOfIteratorHelper(nodes),
+            _step18;
 
         try {
-          for (_iterator19.s(); !(_step19 = _iterator19.n()).done;) {
-            var n = _step19.value;
+          for (_iterator18.s(); !(_step18 = _iterator18.n()).done;) {
+            var n = _step18.value;
 
             // skip rendering nodes in live mode
             if (this.live_mode && !n.onDrawBackground && !n.onDrawForeground) {
               continue;
             }
 
-            if (!overlapBounding$1(this.visible_area, n.getBounding(temp))) {
+            if (!overlapBounding(this.visible_area, n.getBounding(temp))) {
               continue;
             } // out of the visible area
 
@@ -6109,9 +6090,9 @@
             visibleNodes.push(n);
           }
         } catch (err) {
-          _iterator19.e(err);
+          _iterator18.e(err);
         } finally {
-          _iterator19.f();
+          _iterator18.f();
         }
 
         return visibleNodes;
@@ -6190,26 +6171,26 @@
           var drawnNodes = 0;
           var visibleNodes = this.computeVisibleNodes(null, this.visible_nodes);
 
-          var _iterator20 = _createForOfIteratorHelper(visibleNodes),
-              _step20;
+          var _iterator19 = _createForOfIteratorHelper(visibleNodes),
+              _step19;
 
           try {
-            for (_iterator20.s(); !(_step20 = _iterator20.n()).done;) {
-              var _node14 = _step20.value;
+            for (_iterator19.s(); !(_step19 = _iterator19.n()).done;) {
+              var node = _step19.value;
               // transform coords system
               ctx.save();
-              ctx.translate(_node14.pos[0], _node14.pos[1]); // Draw
+              ctx.translate(node.pos[0], node.pos[1]); // Draw
 
-              this.drawNode(_node14, ctx);
+              this.drawNode(node, ctx);
               drawnNodes += 1; // Restore
 
               ctx.restore();
             } // on top (debug)
 
           } catch (err) {
-            _iterator20.e(err);
+            _iterator19.e(err);
           } finally {
-            _iterator20.f();
+            _iterator19.f();
           }
 
           if (this.render_execution_order) this.drawExecutionOrder(ctx); // connections ontop?
@@ -6316,12 +6297,12 @@
         ctx.font = "20px Arial";
 
         if (subnode.inputs) {
-          var _iterator21 = _createForOfIteratorHelper(subnode.inputs),
-              _step21;
+          var _iterator20 = _createForOfIteratorHelper(subnode.inputs),
+              _step20;
 
           try {
-            for (_iterator21.s(); !(_step21 = _iterator21.n()).done;) {
-              var _input6 = _step21.value;
+            for (_iterator20.s(); !(_step20 = _iterator20.n()).done;) {
+              var _input6 = _step20.value;
               if (_input6.not_subgraph_input) continue; // input button clicked
 
               if (this.drawButton(20, y + 2, w - 20, h - 2)) {
@@ -6358,9 +6339,9 @@
               y += h;
             }
           } catch (err) {
-            _iterator21.e(err);
+            _iterator20.e(err);
           } finally {
-            _iterator21.f();
+            _iterator20.f();
           }
         } // add + button
 
@@ -6488,18 +6469,18 @@
           ctx.fillStyle = subgraphNode.bgcolor || "#AAA";
           var title = "";
 
-          var _iterator22 = _createForOfIteratorHelper(this._graph_stack),
-              _step22;
+          var _iterator21 = _createForOfIteratorHelper(this._graph_stack),
+              _step21;
 
           try {
-            for (_iterator22.s(); !(_step22 = _iterator22.n()).done;) {
-              var g = _step22.value;
+            for (_iterator21.s(); !(_step21 = _iterator21.n()).done;) {
+              var g = _step21.value;
               title += "".concat(g._subgraph_node.getTitle(), " >> ");
             }
           } catch (err) {
-            _iterator22.e(err);
+            _iterator21.e(err);
           } finally {
-            _iterator22.f();
+            _iterator21.f();
           }
 
           ctx.fillText(title + subgraphNode.getTitle(), canvas.width * 0.5, 40);
@@ -6683,8 +6664,8 @@
         if (!node.flags.collapsed) {
           // input connection slots
           if (node.inputs) {
-            for (var _i12 = 0; _i12 < node.inputs.length; _i12++) {
-              var _slot4 = node.inputs[_i12];
+            for (var _i13 = 0; _i13 < node.inputs.length; _i13++) {
+              var _slot4 = node.inputs[_i13];
               ctx.globalAlpha = this.editor_alpha; // change opacity of incompatible slots when dragging a connection
 
               if (this.connecting_node && !isValidConnection(_slot4.type, outSlot.type)) {
@@ -6692,7 +6673,7 @@
               }
 
               ctx.fillStyle = _slot4.link ? _slot4.color_on || this.default_connection_color.input_on : _slot4.color_off || this.default_connection_color.input_off;
-              var pos = node.getConnectionPos(true, _i12, slotPos);
+              var pos = node.getConnectionPos(true, _i13, slotPos);
               pos[0] -= node.pos[0];
               pos[1] -= node.pos[1];
 
@@ -6742,10 +6723,10 @@
           ctx.strokeStyle = "black";
 
           if (node.outputs) {
-            for (var _i13 = 0; _i13 < node.outputs.length; _i13++) {
-              var _slot5 = node.outputs[_i13];
+            for (var _i14 = 0; _i14 < node.outputs.length; _i14++) {
+              var _slot5 = node.outputs[_i14];
 
-              var _pos = node.getConnectionPos(false, _i13, slotPos);
+              var _pos = node.getConnectionPos(false, _i14, slotPos);
 
               _pos[0] -= node.pos[0];
               _pos[1] -= node.pos[1];
@@ -6809,39 +6790,39 @@
           var storedSlot; // get first connected slot to render
 
           if (node.inputs) {
-            var _iterator23 = _createForOfIteratorHelper(node.inputs),
-                _step23;
+            var _iterator22 = _createForOfIteratorHelper(node.inputs),
+                _step22;
 
             try {
-              for (_iterator23.s(); !(_step23 = _iterator23.n()).done;) {
-                var _slot6 = _step23.value;
+              for (_iterator22.s(); !(_step22 = _iterator22.n()).done;) {
+                var _slot6 = _step22.value;
                 if (_slot6.link == null) continue;
                 inputSlot = _slot6;
                 storedSlot = _slot6;
                 break;
               }
             } catch (err) {
-              _iterator23.e(err);
+              _iterator22.e(err);
             } finally {
-              _iterator23.f();
+              _iterator22.f();
             }
           }
 
           if (node.outputs) {
-            var _iterator24 = _createForOfIteratorHelper(node.outputs),
-                _step24;
+            var _iterator23 = _createForOfIteratorHelper(node.outputs),
+                _step23;
 
             try {
-              for (_iterator24.s(); !(_step24 = _iterator24.n()).done;) {
-                var _slot7 = _step24.value;
+              for (_iterator23.s(); !(_step23 = _iterator23.n()).done;) {
+                var _slot7 = _step23.value;
                 if (!_slot7.links || !_slot7.links.length) continue;
                 outputSlot = _slot7;
                 storedSlot = _slot7;
               }
             } catch (err) {
-              _iterator24.e(err);
+              _iterator23.e(err);
             } finally {
-              _iterator24.f();
+              _iterator23.f();
             }
           }
 
@@ -7163,21 +7144,21 @@
 
         var nodes = this.graph._nodes;
 
-        var _iterator25 = _createForOfIteratorHelper(nodes),
-            _step25;
+        var _iterator24 = _createForOfIteratorHelper(nodes),
+            _step24;
 
         try {
-          for (_iterator25.s(); !(_step25 = _iterator25.n()).done;) {
-            var _node15 = _step25.value;
+          for (_iterator24.s(); !(_step24 = _iterator24.n()).done;) {
+            var node = _step24.value;
 
             // for every input (we render just inputs because it is easier as every slot can only
             // have one input)
-            if (!_node15.inputs || !_node15.inputs.length) {
+            if (!node.inputs || !node.inputs.length) {
               continue;
             }
 
-            for (var _i14 = 0; _i14 < _node15.inputs.length; ++_i14) {
-              var _input7 = _node15.inputs[_i14];
+            for (var _i15 = 0; _i15 < node.inputs.length; ++_i15) {
+              var _input7 = node.inputs[_i15];
               if (!_input7 || _input7.link == null) continue;
               var linkId = _input7.link;
               var link = this.graph.links[linkId];
@@ -7194,8 +7175,7 @@
                 startNodeSlotPos = startNode.getConnectionPos(false, startNodeSlot, tempA);
               }
 
-              var endNodeSlotPos = _node15.getConnectionPos(true, _i14, tempB); // compute link bounding
-
+              var endNodeSlotPos = node.getConnectionPos(true, _i15, tempB); // compute link bounding
 
               linkBounding[0] = startNodeSlotPos[0];
               linkBounding[1] = startNodeSlotPos[1];
@@ -7213,15 +7193,15 @@
               } // skip links outside of the visible area of the canvas
 
 
-              if (!overlapBounding$1(linkBounding, marginArea)) {
+              if (!overlapBounding(linkBounding, marginArea)) {
                 continue;
               }
 
               var startSlot = startNode.outputs[startNodeSlot];
-              var endSlot = _node15.inputs[_i14];
+              var endSlot = node.inputs[_i15];
               if (!startSlot || !endSlot) continue;
               var startDir = startSlot.dir || (startNode.horizontal ? defaultConfig.DOWN : defaultConfig.RIGHT);
-              var endDir = endSlot.dir || (_node15.horizontal ? defaultConfig.UP : defaultConfig.LEFT);
+              var endDir = endSlot.dir || (node.horizontal ? defaultConfig.UP : defaultConfig.LEFT);
               this.renderLink(ctx, startNodeSlotPos, endNodeSlotPos, link, false, 0, null, startDir, endDir); // event triggered rendered on top
 
               if (link && link._last_time && now - link._last_time < 1000) {
@@ -7234,9 +7214,9 @@
             }
           }
         } catch (err) {
-          _iterator25.e(err);
+          _iterator24.e(err);
         } finally {
-          _iterator25.f();
+          _iterator24.f();
         }
 
         ctx.globalAlpha = 1;
@@ -7278,8 +7258,8 @@
 
         ctx.beginPath();
 
-        for (var _i15 = 0; _i15 < numSubline; _i15 += 1) {
-          var offsety = (_i15 - (numSubline - 1) * 0.5) * 5;
+        for (var _i16 = 0; _i16 < numSubline; _i16 += 1) {
+          var offsety = (_i16 - (numSubline - 1) * 0.5) * 5;
 
           if (this.links_render_mode === defaultConfig.SPLINE_LINK) {
             ctx.moveTo(a[0], a[1] + offsety);
@@ -7455,8 +7435,8 @@
         if (flow) {
           ctx.fillStyle = color;
 
-          for (var _i16 = 0; _i16 < 5; ++_i16) {
-            var f = (getTime() * 0.001 + _i16 * 0.2) % 1;
+          for (var _i17 = 0; _i17 < 5; ++_i17) {
+            var f = (getTime() * 0.001 + _i17 * 0.2) % 1;
             var pos = this.computeConnectionPoint(a, b, f, startDir, endDir);
             ctx.beginPath();
             ctx.arc(pos[0], pos[1], 5, 0, 2 * Math.PI);
@@ -7541,26 +7521,26 @@
         ctx.globalAlpha = 0.75;
         var visible_nodes = this.visible_nodes;
 
-        var _iterator26 = _createForOfIteratorHelper(visible_nodes),
-            _step26;
+        var _iterator25 = _createForOfIteratorHelper(visible_nodes),
+            _step25;
 
         try {
-          for (_iterator26.s(); !(_step26 = _iterator26.n()).done;) {
-            var _node16 = _step26.value;
+          for (_iterator25.s(); !(_step25 = _iterator25.n()).done;) {
+            var node = _step25.value;
             ctx.fillStyle = "black";
-            ctx.fillRect(_node16.pos[0] - defaultConfig.NODE_TITLE_HEIGHT, _node16.pos[1] - defaultConfig.NODE_TITLE_HEIGHT, defaultConfig.NODE_TITLE_HEIGHT, defaultConfig.NODE_TITLE_HEIGHT);
+            ctx.fillRect(node.pos[0] - defaultConfig.NODE_TITLE_HEIGHT, node.pos[1] - defaultConfig.NODE_TITLE_HEIGHT, defaultConfig.NODE_TITLE_HEIGHT, defaultConfig.NODE_TITLE_HEIGHT);
 
-            if (_node16.order === 0) {
-              ctx.strokeRect(_node16.pos[0] - defaultConfig.NODE_TITLE_HEIGHT + 0.5, _node16.pos[1] - defaultConfig.NODE_TITLE_HEIGHT + 0.5, defaultConfig.NODE_TITLE_HEIGHT, defaultConfig.NODE_TITLE_HEIGHT);
+            if (node.order === 0) {
+              ctx.strokeRect(node.pos[0] - defaultConfig.NODE_TITLE_HEIGHT + 0.5, node.pos[1] - defaultConfig.NODE_TITLE_HEIGHT + 0.5, defaultConfig.NODE_TITLE_HEIGHT, defaultConfig.NODE_TITLE_HEIGHT);
             }
 
             ctx.fillStyle = "#FFF";
-            ctx.fillText(_node16.order, _node16.pos[0] + defaultConfig.NODE_TITLE_HEIGHT * -0.5, _node16.pos[1] - 6);
+            ctx.fillText(node.order, node.pos[0] + defaultConfig.NODE_TITLE_HEIGHT * -0.5, node.pos[1] - 6);
           }
         } catch (err) {
-          _iterator26.e(err);
+          _iterator25.e(err);
         } finally {
-          _iterator26.f();
+          _iterator25.f();
         }
 
         ctx.globalAlpha = 1;
@@ -7588,12 +7568,12 @@
         var secondaryTextColor = defaultConfig.WIDGET_SECONDARY_TEXT_COLOR;
         var margin = 15;
 
-        var _iterator27 = _createForOfIteratorHelper(widgets),
-            _step27;
+        var _iterator26 = _createForOfIteratorHelper(widgets),
+            _step26;
 
         try {
-          for (_iterator27.s(); !(_step27 = _iterator27.n()).done;) {
-            var w = _step27.value;
+          for (_iterator26.s(); !(_step26 = _iterator26.n()).done;) {
+            var w = _step26.value;
             var y = posY;
             if (w.y) y = w.y;
             w.last_y = y;
@@ -7753,9 +7733,9 @@
             ctx.globalAlpha = this.editor_alpha;
           }
         } catch (err) {
-          _iterator27.e(err);
+          _iterator26.e(err);
         } finally {
-          _iterator27.f();
+          _iterator26.f();
         }
 
         ctx.restore();
@@ -7778,12 +7758,12 @@
         var width = node.size[0];
         var refWindow = this.getCanvasWindow();
 
-        var _iterator28 = _createForOfIteratorHelper(node.widgets),
-            _step28;
+        var _iterator27 = _createForOfIteratorHelper(node.widgets),
+            _step27;
 
         try {
           var _loop2 = function _loop2() {
-            var w = _step28.value;
+            var w = _step27.value;
             if (!w || w.disabled) return "continue";
             var widgetHeight = w.computeSize ? w.computeSize(width)[1] : defaultConfig.NODE_WIDGET_HEIGHT;
             var widgetWidth = w.width || width; // outside
@@ -7813,7 +7793,7 @@
 
               case "slider":
                 var range = w.options.max - w.options.min;
-                var nvalue = Math.clamp((x - 15) / (widgetWidth - 30), 0, 1);
+                var nvalue = clamp((x - 15) / (widgetWidth - 30), 0, 1);
                 w.value = w.options.min + (w.options.max - w.options.min) * nvalue;
 
                 if (w.callback) {
@@ -7957,16 +7937,16 @@
             };
           };
 
-          for (_iterator28.s(); !(_step28 = _iterator28.n()).done;) {
+          for (_iterator27.s(); !(_step27 = _iterator27.n()).done;) {
             var _ret = _loop2();
 
             if (_ret === "continue") continue;
             if (_typeof(_ret) === "object") return _ret.v;
           }
         } catch (err) {
-          _iterator28.e(err);
+          _iterator27.e(err);
         } finally {
-          _iterator28.f();
+          _iterator27.f();
         }
 
         var that = this;
@@ -7999,14 +7979,14 @@
         ctx.save();
         ctx.globalAlpha = 0.5 * this.editor_alpha;
 
-        var _iterator29 = _createForOfIteratorHelper(groups),
-            _step29;
+        var _iterator28 = _createForOfIteratorHelper(groups),
+            _step28;
 
         try {
-          for (_iterator29.s(); !(_step29 = _iterator29.n()).done;) {
-            var group = _step29.value;
+          for (_iterator28.s(); !(_step28 = _iterator28.n()).done;) {
+            var group = _step28.value;
 
-            if (!overlapBounding$1(this.visible_area, group._bounding)) {
+            if (!overlapBounding(this.visible_area, group._bounding)) {
               continue;
             } // out of the visible area
 
@@ -8031,9 +8011,9 @@
             ctx.fillText(group.title, pos[0] + 4, pos[1] + fontSize);
           }
         } catch (err) {
-          _iterator29.e(err);
+          _iterator28.e(err);
         } finally {
-          _iterator29.f();
+          _iterator28.f();
         }
 
         ctx.restore();
@@ -8043,18 +8023,18 @@
       value: function adjustNodesSize() {
         var nodes = this.graph._nodes;
 
-        var _iterator30 = _createForOfIteratorHelper(nodes),
-            _step30;
+        var _iterator29 = _createForOfIteratorHelper(nodes),
+            _step29;
 
         try {
-          for (_iterator30.s(); !(_step30 = _iterator30.n()).done;) {
-            var _node17 = _step30.value;
-            _node17.size = _node17.computeSize();
+          for (_iterator29.s(); !(_step29 = _iterator29.n()).done;) {
+            var node = _step29.value;
+            node.size = node.computeSize();
           }
         } catch (err) {
-          _iterator30.e(err);
+          _iterator29.e(err);
         } finally {
-          _iterator30.f();
+          _iterator29.f();
         }
 
         this.setDirty(true, true);
@@ -8332,10 +8312,10 @@
         } else if (["enum", "combo"].includes(type) && info.values) {
           inputHTML = "<select autofocus type='text' class='value'>"; // eslint-disable-next-line
 
-          for (var _i17 in info.values) {
-            var value = _i17;
-            if (info.values.constructor === Array) value = info.values[_i17];
-            inputHTML += "<option value=\"".concat(value, "\" ").concat(value == node.properties[property] ? "selected" : "", ">").concat(info.values[_i17], "</option>");
+          for (var _i18 in info.values) {
+            var value = _i18;
+            if (info.values.constructor === Array) value = info.values[_i18];
+            inputHTML += "<option value=\"".concat(value, "\" ").concat(value == node.properties[property] ? "selected" : "", ">").concat(info.values[_i18], "</option>");
           }
 
           inputHTML += "</select>";
@@ -8613,12 +8593,12 @@
           panel.clear(); // show currents
 
           if (node.inputs) {
-            var _iterator31 = _createForOfIteratorHelper(node.inputs),
-                _step31;
+            var _iterator30 = _createForOfIteratorHelper(node.inputs),
+                _step30;
 
             try {
               var _loop3 = function _loop3() {
-                var input = _step31.value;
+                var input = _step30.value;
                 if (input.not_subgraph_input) return "continue";
                 var html = "<button>&#10005;</button> <span class='bullet_icon'></span><span class='name'></span><span class='type'></span>";
                 var elem = panel.addHTML(html, "subgraph_property");
@@ -8632,15 +8612,15 @@
                 });
               };
 
-              for (_iterator31.s(); !(_step31 = _iterator31.n()).done;) {
+              for (_iterator30.s(); !(_step30 = _iterator30.n()).done;) {
                 var _ret2 = _loop3();
 
                 if (_ret2 === "continue") continue;
               }
             } catch (err) {
-              _iterator31.e(err);
+              _iterator30.e(err);
             } finally {
-              _iterator31.f();
+              _iterator30.f();
             }
           }
         } // add extra
@@ -8668,19 +8648,19 @@
         if (!this.canvas) return;
         var panels = this.canvas.parentNode.querySelectorAll(".litegraph.dialog");
 
-        var _iterator32 = _createForOfIteratorHelper(panels),
-            _step32;
+        var _iterator31 = _createForOfIteratorHelper(panels),
+            _step31;
 
         try {
-          for (_iterator32.s(); !(_step32 = _iterator32.n()).done;) {
-            var panel = _step32.value;
+          for (_iterator31.s(); !(_step31 = _iterator31.n()).done;) {
+            var panel = _step31.value;
             if (!panel.node) continue;
             if (!panel.node.graph || panel.graph !== this.graph) panel.close();
           }
         } catch (err) {
-          _iterator32.e(err);
+          _iterator31.e(err);
         } finally {
-          _iterator32.f();
+          _iterator31.f();
         }
       }
     }, {
@@ -9036,12 +9016,12 @@
         var entries = [];
 
         if (options) {
-          var _iterator33 = _createForOfIteratorHelper(options),
-              _step33;
+          var _iterator32 = _createForOfIteratorHelper(options),
+              _step32;
 
           try {
-            for (_iterator33.s(); !(_step33 = _iterator33.n()).done;) {
-              var entry = _step33.value;
+            for (_iterator32.s(); !(_step32 = _iterator32.n()).done;) {
+              var entry = _step32.value;
 
               if (!entry) {
                 entries.push(null);
@@ -9066,9 +9046,9 @@
               entries.push(data);
             }
           } catch (err) {
-            _iterator33.e(err);
+            _iterator32.e(err);
           } finally {
-            _iterator33.f();
+            _iterator32.f();
           }
         }
 
@@ -9121,12 +9101,12 @@
         var entries = [];
 
         if (options) {
-          var _iterator34 = _createForOfIteratorHelper(options),
-              _step34;
+          var _iterator33 = _createForOfIteratorHelper(options),
+              _step33;
 
           try {
-            for (_iterator34.s(); !(_step34 = _iterator34.n()).done;) {
-              var entry = _step34.value;
+            for (_iterator33.s(); !(_step33 = _iterator33.n()).done;) {
+              var entry = _step33.value;
 
               if (!entry) {
                 // separator?
@@ -9149,9 +9129,9 @@
               entries.push(data);
             }
           } catch (err) {
-            _iterator34.e(err);
+            _iterator33.e(err);
           } finally {
-            _iterator34.f();
+            _iterator33.f();
           }
         }
 
@@ -9178,10 +9158,10 @@
             // submenu why?
             var _entries = [];
 
-            for (var _i18 in value) {
+            for (var _i19 in value) {
               _entries.push({
-                content: _i18,
-                value: value[_i18]
+                content: _i19,
+                value: value[_i19]
               });
             }
 
@@ -9213,17 +9193,17 @@
         var refWindow = canvas.getCanvasWindow();
         var entries = []; // eslint-disable-next-line
 
-        for (var _i19 in node.properties) {
-          var _value = node.properties[_i19] ? node.properties[_i19] : " ";
+        for (var _i20 in node.properties) {
+          var _value = node.properties[_i20] ? node.properties[_i20] : " ";
 
           if (_typeof(_value) === "object") _value = JSON.stringify(_value);
-          var info = node.getPropertyInfo(_i19);
+          var info = node.getPropertyInfo(_i20);
           if (info.type == "enum" || info.type == "combo") _value = LGraphCanvas.getPropertyPrintableValue(_value, info.values); // value could contain invalid html characters, clean that
 
           _value = LGraphCanvas.decodeHTML(_value);
           entries.push({
-            content: "<span class=\"property_name\">".concat(info.label ? info.label : _i19, "</span>") + "<span class=\"property_value\">".concat(_value, "</span>"),
-            value: _i19
+            content: "<span class=\"property_name\">".concat(info.label ? info.label : _i20, "</span>") + "<span class=\"property_value\">".concat(_value, "</span>"),
+            value: _i20
           });
         }
 
@@ -9373,11 +9353,11 @@
           content: "<span style='display: block; padding-left: 4px;'>No color</span>"
         }); // eslint-disable-next-line
 
-        for (var _i20 in LGraphCanvas.node_colors) {
-          var color = LGraphCanvas.node_colors[_i20];
+        for (var _i21 in LGraphCanvas.node_colors) {
+          var color = LGraphCanvas.node_colors[_i21];
           values.push({
-            value: _i20,
-            content: "<span style=\"display: block; color: #999; padding-left: 4px; border-left: 8px solid ".concat(color.color, "; background-color:").concat(color.bgcolor, "\">").concat(_i20, "</span>")
+            value: _i21,
+            content: "<span style=\"display: block; color: #999; padding-left: 4px; border-left: 8px solid ".concat(color.color, "; background-color:").concat(color.bgcolor, "\">").concat(_i21, "</span>")
           });
         }
 
@@ -11491,6 +11471,7 @@
    * @class CurveEditor
    * @param points
    */
+
   var CurveEditor = /*#__PURE__*/function () {
     function CurveEditor(points) {
       _classCallCheck(this, CurveEditor);
@@ -11628,12 +11609,12 @@
           }
 
           if (!isEdgePoint) {
-            point[0] = Math.clamp(x, 0, 1);
+            point[0] = clamp(x, 0, 1);
           } else {
             point[0] = s === 0 ? 0 : 1;
           }
 
-          point[1] = 1.0 - Math.clamp(y, 0, 1);
+          point[1] = 1.0 - clamp(y, 0, 1);
           points.sort(function (a, b) {
             return a[0] - b[0];
           });
@@ -11839,7 +11820,7 @@
   exports.getParameterNames = getParameterNames;
   exports.isInsideRectangle = isInsideRectangle;
   exports.isValidConnection = isValidConnection;
-  exports.overlapBounding = overlapBounding$1;
+  exports.overlapBounding = overlapBounding;
   exports.registerNodeType = registerNodeType;
   exports.registerSearchboxExtra = registerSearchboxExtra;
   exports.unregisterNodeType = unregisterNodeType;

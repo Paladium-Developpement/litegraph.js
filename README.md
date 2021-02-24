@@ -144,6 +144,4 @@ Open your browser and point it to http://localhost:8000/. You can select a demo 
 - [] Right Click on nodes > Mode (to remove ?)
 - [] Right Click on nodes > Pin (to remove ?)
 - [] Right Click on nodes > Resize
-- Uncaught ReferenceError: overlapBounding is not defined (move group)
-- Math.clamp is not a function
 - List of property nothing

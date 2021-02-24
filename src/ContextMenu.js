@@ -292,10 +292,9 @@ export default class ContextMenu {
     }
 
     // this code is used to trigger events easily (used in the context menu mouseleave
-    static trigger(element, eventName, params, origin) {
+    static trigger(element, eventName, params) {
         const evt = document.createEvent("CustomEvent");
         evt.initCustomEvent(eventName, true, true, params); // canBubble, cancelable, detail
-        evt.target = origin;
         if (element.dispatchEvent) element.dispatchEvent(evt);
         else if (element.__events) element.__events.dispatchEvent(evt);
         // else nothing seems binded here so nothing to do

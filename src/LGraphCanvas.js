@@ -3,7 +3,7 @@ import { getFileExtension } from "./utils/file";
 import ContextMenu from "./ContextMenu";
 import { isValidConnection } from "./utils/function";
 import LGraphNode from "./LGraphNode";
-import { distance, isInsideRectangle, overlapBounding } from "./utils/math";
+import { distance, isInsideRectangle, overlapBounding, clamp } from "./utils/math";
 import LGraphGroup from "./LGraphGroup";
 import * as registry from "./utils/registry";
 import defaultConfig from "./utils/defaultConfig";
@@ -1486,8 +1486,10 @@ export default class LGraphCanvas {
         let index = 0;
         const selectedNodesArray = [];
 
-        for (const selectedNode of this.selected_nodes) {
-            node._relative_id = index;
+        // eslint-disable-next-line guard-for-in, no-restricted-syntax
+        for (const i in this.selected_nodes) {
+            const node = this.selected_nodes[i];
+            node.relative_id = index;
             selectedNodesArray.push(node);
             index += 1;
         }
@@ -3782,7 +3784,7 @@ export default class LGraphCanvas {
                     break;
                 case "slider":
                     const range = w.options.max - w.options.min;
-                    const nvalue = Math.clamp((x - 15) / (widgetWidth - 30), 0, 1);
+                    const nvalue = clamp((x - 15) / (widgetWidth - 30), 0, 1);
                     w.value = w.options.min + (w.options.max - w.options.min) * nvalue;
                     if (w.callback) {
                         setTimeout(() => innerValueChange(w, w.value), 20);

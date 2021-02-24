@@ -433,12 +433,12 @@ export default class LGraphNode {
      * Retrieves the input data (data traveling through the connection) from one slot
      * @method getInputData
      * @param {number} slot
-     * @param {boolean} force_update if set to true it will force the connected node of this slot
+     * @param {boolean} forceUpdate if set to true it will force the connected node of this slot
      *     to output data into this link
      * @return {*} data or if it is not connected returns undefined
      * @memberOf LGraphNode
      */
-    getInputData(slot, force_update) {
+    getInputData(slot, forceUpdate) {
         if (!this.inputs) {
             return;
         } // undefined;
@@ -447,14 +447,14 @@ export default class LGraphNode {
             return;
         }
 
-        const link_id = this.inputs[slot].link;
-        const link = this.graph.links[link_id];
+        const linkId = this.inputs[slot].link;
+        const link = this.graph.links[linkId];
         if (!link) {
             // bug: weird case but it happens sometimes
             return null;
         }
 
-        if (!force_update) {
+        if (link.data && !forceUpdate) {
             return link.data;
         }
 
