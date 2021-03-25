@@ -3,7 +3,9 @@ import { getFileExtension } from "./utils/file";
 import ContextMenu from "./ContextMenu";
 import { isValidConnection } from "./utils/function";
 import LGraphNode from "./LGraphNode";
-import { distance, isInsideRectangle, overlapBounding, clamp } from "./utils/math";
+import {
+    distance, isInsideRectangle, overlapBounding, clamp,
+} from "./utils/math";
 import LGraphGroup from "./LGraphGroup";
 import * as registry from "./utils/registry";
 import defaultConfig from "./utils/defaultConfig";
@@ -3820,7 +3822,8 @@ export default class LGraphCanvas {
                             let index = -1;
                             this.last_mouseclick = 0; // avoids dobl click event
                             if (values.constructor === Object) {
-                                index = valuesList.indexOf(String(w.value)) + delta;
+                                const indexInValues = valuesList.indexOf(String(w.value));
+                                index = (indexInValues === -1) ? 0 : indexInValues + delta;
                             } else {
                                 index = valuesList.indexOf(w.value) + delta;
                             }
@@ -3833,28 +3836,25 @@ export default class LGraphCanvas {
                             if (values.constructor === Array) {
                                 w.value = values[index];
                             } else {
-                                w.value = index;
+                                w.value = valuesList[index];
+                                console.log(w.value);
                             }
                         } else { // combo clicked
                             const textValues = values !== valuesList
-                                ? Object.values(values)
+                                ? Object.keys(values)
                                 : values;
                             const menu = new ContextMenu(textValues, {
                                 scale: Math.max(1, this.ds.scale),
                                 event,
                                 className: "dark",
-                                callback: innerClicked.bind(w),
+                                callback: (v) => {
+                                    w.value = values != valuesList ? textValues.indexOf(v) : v;
+                                    innerValueChange(w, v);
+                                    this.dirty_canvas = true;
+                                    return false;
+                                },
                             },
                             refWindow);
-
-                            const that = this;
-                            function innerClicked(v, option, event) {
-                                if (values != valuesList) v = textValues.indexOf(v);
-                                this.value = v;
-                                innerValueChange(this, v);
-                                that.dirty_canvas = true;
-                                return false;
-                            }
                         }
                     } else if (event.type === "mouseup" && w.type === "number") {
                         const delta = x < 40 ? -1 : x > widgetWidth - 40 ? 1 : 0;

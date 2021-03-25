@@ -75,6 +75,7 @@ function TestWidgetsNode() {
     this.slider = this.addWidget("slider", "Slider", 0.5, (v) => {}, { min: 0, max: 1 });
     this.number = this.addWidget("number", "Number", 0.5, (v) => {}, { min: 0, max: 100 });
     this.combo = this.addWidget("combo", "Combo", "red", (v) => {}, { values: ["red", "green", "blue"] });
+    this.comboBis = this.addWidget("combo", "Combo Hex", "red", (v) => {}, { values: {red: "#FF0000", green: "#00FF00", blue: "#0000FF"} });
     this.text = this.addWidget("text", "Text", "edit me", (v) => {}, {});
     this.text2 = this.addWidget("text", "Text", "multiline", (v) => {}, { multiline: true });
     this.toggle = this.addWidget("toggle", "Toggle", true, (v) => {}, { on: "enabled", off: "disabled" });
