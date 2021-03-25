@@ -1,0 +1,62 @@
+name: Publish Doc on GitHub Page
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy-doc:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v2
+
+      - name: Get Dependency
+        run: npm i
+
+      - name: Generate doc
+        run: npm run doc
+
+      - name: Deploy documentation
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./doc
+  build-push:
+    runs-on: ubuntu-latest  
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v2
+        with: 
+          registry-url: 'https://npm.pkg.github.com'
+
+      - name: Increase version
+        run: npm version patch
+        
+      - name: Get Dependency
+        run: npm i
+
+      - name: Set remote registry
+        run: npm set registry https://npm.palagitium.dev/
+
+      - name: Set token
+        run: npm config set //npm.palagitium.dev/:_authToken ${{ secrets.NPM_TOKEN }}
+
+      - name: Generate builds
+        run: npm run build
+
+      - name: Publish to registry
+        run: npm publish
+
+      - name: Commit and Push Version
+        uses: EndBug/add-and-commit@v7
+        with:
+          message: '[CI/CD] Version Bump'
+          add: 'package.json'

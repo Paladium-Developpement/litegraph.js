@@ -284,7 +284,7 @@ export default class LGraphNode {
         }
 
         // we clone it because serialize returns shared containers
-        const data = LGraphNode.cloneObject(this.serialize());
+        const data = cloneObject(this.serialize());
 
         // remove links
         if (data.inputs) {

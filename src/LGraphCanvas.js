@@ -3847,6 +3847,7 @@ export default class LGraphCanvas {
                             },
                             refWindow);
 
+                            const that = this;
                             function innerClicked(v, option, event) {
                                 if (values != valuesList) v = textValues.indexOf(v);
                                 this.value = v;

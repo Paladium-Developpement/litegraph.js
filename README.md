@@ -145,3 +145,4 @@ Open your browser and point it to http://localhost:8000/. You can select a demo 
 - [] Right Click on nodes > Pin (to remove ?)
 - [] Right Click on nodes > Resize
 - List of property nothing
+- TypeError: LGraphNode.cloneObject is not a function

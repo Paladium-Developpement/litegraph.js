@@ -11,3 +11,5 @@ npm-debug.log
 # Generated doc
 doc/*
 doc/
+
+build/

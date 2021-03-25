@@ -74,7 +74,7 @@ export default {
     proxy: null, // used to redirect calls
     node_images_path: "",
 
-    debug: true,
+    debug: false,
     catch_exceptions: true,
     throw_errors: true,
     allow_scripts: false,
