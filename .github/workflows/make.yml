@@ -1,4 +1,4 @@
-name: Publish Doc on GitHub Page
+name: Publish Doc on GitHub Page/Publish new version
 
 on:
   push:
@@ -38,7 +38,7 @@ jobs:
           registry-url: 'https://npm.pkg.github.com'
 
       - name: Increase version
-        run: npm version patch
+        run: npm version patch --no-git-tag-version
         
       - name: Get Dependency
         run: npm i
@@ -53,7 +53,7 @@ jobs:
         run: npm run build
 
       - name: Publish to registry
-        run: npm publish --no-git-tag-version
+        run: npm publish
 
       - name: Commit and Push Version
         uses: EndBug/add-and-commit@v7
