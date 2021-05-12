@@ -276,7 +276,7 @@ export default class ContextMenu {
 
     close(e, ignoreParentMenu) {
         if (this.root.parentNode) {
-            this.root.remove()
+            this.root.remove();
         }
         if (this.parentMenu && !ignoreParentMenu) {
             this.parentMenu.lock = false;

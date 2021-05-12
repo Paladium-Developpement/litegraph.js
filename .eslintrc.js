@@ -12,6 +12,7 @@ module.exports = {
     rules: {
         indent: ["error", 4, { SwitchCase: 1 }],
         quotes: ["error", "double"],
+        "template-curly-spacing" : "off",
         "no-underscore-dangle": 0,
         "no-continue": 0,
         "no-break": 0,

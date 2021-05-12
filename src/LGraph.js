@@ -756,7 +756,7 @@ export default class LGraph {
 
         // remove from containers
         if (this._nodes.includes(node)) {
-            this._nodes = this._nodes.filter(n => n !== node);
+            this._nodes = this._nodes.filter((n) => n !== node);
         }
         delete this._nodes_by_id[node.id];
 

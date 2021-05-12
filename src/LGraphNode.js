@@ -2284,5 +2284,4 @@ export default class LGraphNode {
             }
         }
     }
-
 }
