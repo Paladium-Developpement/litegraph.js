@@ -3903,6 +3903,7 @@ export default class LGraphCanvas {
             // value changed
             if (oldValue !== w.value) {
                 if (node.onWidgetChanged) node.onWidgetChanged(w.name, w.value, oldValue, w);
+                if (node.graph.on_change) node.graph.on_change(node.graph);
                 node.graph._version++;
             }
 
