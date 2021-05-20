@@ -3919,6 +3919,9 @@ export default class LGraphCanvas {
             if (widget.callback) {
                 widget.callback(widget.value, that, node, pos, event);
             }
+            if (node.onWidgetChanged) node.onWidgetChanged(widget.name, widget.value, oldValue, widget);
+            if (node.graph.on_change) node.graph.on_change(node.graph);
+            node.graph._version++;
         }
 
         return null;
