@@ -1,6 +1,6 @@
 {
     "name": "@paladium/litegraph.js",
-    "version": "0.8.10",
+    "version": "0.8.11",
     "description": "A graph node editor similar to PD or UDK Blueprints. It works in an HTML5 Canvas and allows to export graphs to be included in applications.",
     "main": "build/litegraph.js",
     "module": "build/litegraph.esm.js",
@@ -31,7 +31,7 @@
         "last 2 versions"
     ],
     "devDependencies": {
-	"@babel/core": "^7.13.0",
+        "@babel/core": "^7.13.0",
         "@babel/eslint-parser": "^7.13.0",
         "@babel/plugin-proposal-class-properties": "^7.13.0",
         "@babel/preset-env": "^7.13.0",
